@@ -18,6 +18,19 @@
     <!-- jvectormap -->
     <link href="{{ asset('template') }}/libs/jqvmap/jqvmap.min.css" rel="stylesheet" />
 
+    <!-- DataTables -->
+    <link href="{{ asset('template') }}/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet"
+        type="text/css" />
+    {{-- <link href="{{ asset('template') }}/libs/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css" rel="stylesheet"
+        type="text/css" /> --}}
+
+    <!-- Responsive datatable examples -->
+    <link href="{{ asset('template') }}/libs/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css"
+        rel="stylesheet" type="text/css" />
+
+    <!-- Sweet Alert-->
+    <link href="{{ asset('template') }}/libs/sweetalert2/sweetalert2.min.css" rel="stylesheet" type="text/css" />
+
     <!-- Bootstrap Css -->
     <link href="{{ asset('template') }}/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
     <!-- Icons Css -->
@@ -41,7 +54,23 @@
         <!-- ============================================================== -->
         <!-- Start right Content here -->
         <!-- ============================================================== -->
-        @yield('content')
+        <div class="main-content">
+            @yield('content')
+            <footer class="footer">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            2020 © Xoric.
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="text-sm-end d-none d-sm-block">
+                                Crafted with <i class="mdi mdi-heart text-danger"></i> by Themesdesign
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </div>
         <!-- end main content-->
 
     </div>
@@ -420,7 +449,24 @@
     <script src="{{ asset('template') }}/libs/jqvmap/jquery.vmap.min.js"></script>
     <script src="{{ asset('template') }}/libs/jqvmap/maps/jquery.vmap.usa.js"></script>
 
-    <script src="{{ asset('template') }}/js/pages/dashboard.init.js"></script>
+    {{-- <script src="{{ asset('template') }}/js/pages/dashboard.init.js"></script> --}}
+
+    <!-- Required datatable js -->
+    <script src="{{ asset('template') }}/libs/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="{{ asset('template') }}/libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
+
+    <!-- Responsive examples -->
+    <script src="{{ asset('template') }}/libs/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="{{ asset('template') }}/libs/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js"></script>
+
+    <!-- Datatable init js -->
+    <script src="{{ asset('template') }}/js/pages/datatables.init.js"></script>
+
+    <!-- Sweet Alerts js -->
+    <script src="{{ asset('template') }}/libs/sweetalert2/sweetalert2.min.js"></script>
+
+    <!-- Sweet alert init js-->
+    <script src="{{ asset('template') }}/js/pages/sweet-alerts.init.js"></script>
 
     <script src="{{ asset('template') }}/js/app.js"></script>
 

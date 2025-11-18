@@ -17,7 +17,7 @@ class HakAkses
      */
     public function handle(Request $request, Closure $next, ...$roles)
     {
-        if (in_array(Auth::user()->role_id, $roles)) {
+        if (in_array(Auth::user()->role, $roles)) {
             return $next($request);
         }
 

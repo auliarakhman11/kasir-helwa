@@ -18,15 +18,16 @@
 
 
                 <li class="mm-active">
-                    <a href="javascript: void(0);" class="has-arrow waves-effect mm-active">
+                    <a href="javascript: void(0);"
+                        class="has-arrow waves-effect {{ Request::is(['bahan']) ? 'mm-active' : '' }}">
                         <div class="d-inline-block icons-sm me-1"><i class="fas fa-box-open"></i>
                         </div>
                         <span>Produk</span>
                     </a>
-                    <ul class="sub-menu mm-collapse mm-show" aria-expanded="false">
-                        <li class="mm-active"><a href="email-inbox.html" class="active">Inbox</a></li>
-                        <li><a href="email-read.html">Email Read</a></li>
-                        <li><a href="email-compose.html">Email Compose</a></li>
+                    <ul class="sub-menu {{ Request::is(['bahan']) ? 'mm-collapse mm-show' : '' }}"
+                        aria-expanded="false">
+                        <li class="{{ Request::is('bahan') ? 'mm-active' : '' }}"><a href="{{ route('bahan') }}"
+                                class="{{ Request::is('bahan') ? 'active' : '' }}">Bahan</a></li>
                     </ul>
                 </li>
 
