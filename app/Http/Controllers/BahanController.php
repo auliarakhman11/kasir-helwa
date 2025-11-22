@@ -42,7 +42,7 @@ class BahanController extends Controller
         ];
         Bahan::where('id', $request->id)->update($data);
 
-        return redirect(route('bahanSatuan'))->with('success', 'Data berhasil diubah');
+        return redirect(route('bahan'))->with('success', 'Data berhasil diubah');
     }
 
     public function dropDataBahan(Request $request)

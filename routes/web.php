@@ -4,6 +4,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BahanController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -42,7 +43,25 @@ Route::middleware('auth')->group(function () {
         Route::get('bahan', [BahanController::class, 'index'])->name('bahan');
         Route::post('addBahan', [BahanController::class, 'addBahan'])->name('addBahan');
         Route::patch('editBahan', [BahanController::class, 'editBahan'])->name('editBahan');
-        Route::post('dropDataBahan', [BahanController::class, 'dropDataBahan'])->name('dropDataBahan');
+        Route::patch('dropDataBahan', [BahanController::class, 'dropDataBahan'])->name('dropDataBahan');
+
+
+        //produk
+        Route::get('/products', [ProductsController::class, 'index'])->name('products');
+        Route::post('/products', [ProductsController::class, 'addProduct'])->name('addProduct');
+        Route::patch('/produk', [ProductsController::class, 'editProduk'])->name('editProduk');
+
+        Route::post('/add-resep', [ProductsController::class, 'addResep'])->name('addResep');
+
+        Route::post('/drop-resep', [ProductsController::class, 'dropResep'])->name('dropResep');
+
+        Route::post('/sort-produk', [ProductsController::class, 'sortProduk'])->name('sortProduk');
+
+        Route::get('/delete-produk/{id}', [ProductsController::class, 'deleteProduk'])->name('deleteProduk');
+
+        Route::get('getHargaResep/{produk_id}', [ProductsController::class, 'getHargaResep'])->name('getHargaResep');
+        //end produk
+
     });
 
 

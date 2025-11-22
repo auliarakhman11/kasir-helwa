@@ -35,7 +35,7 @@
                         <button type="button" class="btn btn-sm btn-light float-end" data-bs-toggle="modal"
                             data-bs-target="#add-bahan">
                             <i class="fa fa-plus-circle"></i>
-                            Tambah Bahan
+                            Tambah Outlet
                         </button>
                     </div>
                 </div>

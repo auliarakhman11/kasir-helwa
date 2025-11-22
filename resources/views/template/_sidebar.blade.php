@@ -19,15 +19,17 @@
 
                 <li class="mm-active">
                     <a href="javascript: void(0);"
-                        class="has-arrow waves-effect {{ Request::is(['bahan']) ? 'mm-active' : '' }}">
+                        class="has-arrow waves-effect {{ Request::is(['bahan','products']) ? 'mm-active' : '' }}">
                         <div class="d-inline-block icons-sm me-1"><i class="fas fa-box-open"></i>
                         </div>
                         <span>Produk</span>
                     </a>
-                    <ul class="sub-menu {{ Request::is(['bahan']) ? 'mm-collapse mm-show' : '' }}"
+                    <ul class="sub-menu {{ Request::is(['bahan','products']) ? 'mm-collapse mm-show' : '' }}"
                         aria-expanded="false">
                         <li class="{{ Request::is('bahan') ? 'mm-active' : '' }}"><a href="{{ route('bahan') }}"
                                 class="{{ Request::is('bahan') ? 'active' : '' }}">Bahan</a></li>
+                        <li class="{{ Request::is('products') ? 'mm-active' : '' }}"><a href="{{ route('products') }}"
+                                class="{{ Request::is('products') ? 'active' : '' }}">Produk</a></li>
                     </ul>
                 </li>
 
