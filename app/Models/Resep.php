@@ -10,17 +10,6 @@ class Resep extends Model
     use HasFactory;
 
     protected $table = 'resep';
-    
-    protected $fillable = ['produk_id','bahan_id','takaran'];
 
-    public function bahan()
-    {
-        return $this->belongsTo(Bahan::class,'bahan_id','id');
-    }
-
-    public function hargaBahan()
-    {
-        return $this->hasMany(HargaBahan::class,'bahan_id','bahan_id');
-    }
-
+    protected $fillable = ['produk_id', 'takaran1', 'takaran2', 'cluster_id', 'ukuran', 'harga'];
 }

@@ -56,7 +56,8 @@
                                         <tr>
                                             <th>#</th>
                                             <th>Produk</th>
-                                            <th>Kategori</th>
+                                            <th>Gender</th>
+                                            <th>Grade</th>
                                             <th>Status</th>
                                             <th>Aksi</th>
                                         </tr>
@@ -69,18 +70,17 @@
                                             <tr>
                                                 <td>{{ $i++ }}</td>
                                                 <td>{{ $p->nm_produk }}</td>
-                                                <td>{{ $p->kategori->kategori }}</td>
-                                                
+                                                <td>{{ $p->gender->nm_gender }}</td>
                                                 <td class="{{ $p->status == 'ON' ? 'text-success' : 'text-danger' }}">
                                                     {{ $p->status }}</td>
-
                                                 <td>
-                                                    <button type="button" class="btn btn-sm btn-warning resep" data-bs-toggle="modal"
-                                                        data-bs-target="#resep" produk-id="{{ $p->id }}"
-                                                        nm-produk="{{ $p->nm_produk }}">
+                                                    <button type="button" class="btn btn-sm btn-warning resep"
+                                                        data-bs-toggle="modal" data-bs-target="#resep"
+                                                        produk-id="{{ $p->id }}" nm-produk="{{ $p->nm_produk }}">
                                                         Resep
                                                     </button>
-                                                    <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal"
+                                                    <button type="button" class="btn btn-sm btn-primary"
+                                                        data-bs-toggle="modal"
                                                         data-bs-target="#edit-product{{ $p->id }}">
                                                         <i class="fa fa-edit"></i>
                                                     </button>
@@ -130,17 +130,30 @@
                                         <label for="">
                                             <dt>Nama Produk</dt>
                                         </label>
-                                        <input type="text" name="nm_produk" class="form-control"
-                                            placeholder="Nama Produk" required>
+                                        <input type="text" name="nm_produk" class="form-control" required>
                                     </div>
 
                                     <div class="col-lg-6 mb-2">
                                         <label for="">
-                                            <dt>Kategori</dt>
+                                            <dt>Rename</dt>
                                         </label>
-                                        <select name="kategori_id" class="form-control" required>
-                                            @foreach ($kategori as $k)
-                                                <option value="{{ $k->id }}">{{ $k->kategori }}</option>
+                                        <input type="text" name="ganti_nama" class="form-control" required>
+                                    </div>
+
+                                    <div class="col-lg-6 mb-2">
+                                        <label for="">
+                                            <dt>Brand</dt>
+                                        </label>
+                                        <input type="text" name="brand" class="form-control" required>
+                                    </div>
+
+                                    <div class="col-lg-6 mb-2">
+                                        <label for="">
+                                            <dt>Gender</dt>
+                                        </label>
+                                        <select name="gender_id" class="form-control" required>
+                                            @foreach ($gender as $d)
+                                                <option value="{{ $d->id }}">{{ $d->nm_gender }}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -154,9 +167,6 @@
                                             <option value="OFF">OFF</option>
                                         </select>
                                     </div>
-
-
-                                    
 
                                     <div class="col-12 text-center"><label for="">
                                             <dt>Outlet</dt>
@@ -190,8 +200,8 @@
         <form action="{{ route('editProduk') }}" method="post">
             @csrf
             @method('patch')
-            <div class="modal fade" id="edit-product{{ $p->id }}" role="dialog" aria-labelledby="exampleModalLabelEdit"
-                aria-hidden="true">
+            <div class="modal fade" id="edit-product{{ $p->id }}" role="dialog"
+                aria-labelledby="exampleModalLabelEdit" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -442,7 +452,7 @@
                     },
                     success: function(data) {
                         getResep(produk_id);
-                        
+
                         Swal.fire({
                             position: "top-end",
                             icon: "success",

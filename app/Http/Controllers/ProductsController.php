@@ -6,6 +6,7 @@ use App\Models\Bahan;
 use App\Models\Kategori;
 use App\Models\Produk;
 use App\Models\Cabang;
+use App\Models\Gender;
 use App\Models\ProdukCabang;
 use App\Models\Resep;
 use Illuminate\Http\Request;
@@ -18,9 +19,10 @@ class ProductsController extends Controller
         $data = [
             'title' => 'Products',
             'kategori' => Kategori::orderBy('possition', 'ASC')->get(),
-            'produk' => Produk::orderBy('possition', 'ASC')->with(['kategori','produkCabang'])->where('hapus', 0)->get(),
+            'produk' => Produk::orderBy('possition', 'ASC')->with(['kategori', 'produkCabang'])->where('hapus', 0)->get(),
             'bahan' => Bahan::orderBy('possition', 'ASC')->where('aktif', 'Y')->where('jenis', 1)->get(),
-            'cabang' => Cabang::where('off', 0)->get()
+            'cabang' => Cabang::where('off', 0)->get(),
+            'gender' => Gender::all(),
         ];
         // $produk = Produk::with(['kategori','getHarga.delivery'])->get();
         // dd($produk[0]);
@@ -102,7 +104,7 @@ class ProductsController extends Controller
 
 
             Produk::where('id', $request->id)->update($data);
-            
+
 
             $cabang_id = $request->cabang_id;
             ProdukCabang::where('produk_id', $request->id)->delete();
