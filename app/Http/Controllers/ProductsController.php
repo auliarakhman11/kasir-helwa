@@ -6,9 +6,11 @@ use App\Models\Bahan;
 use App\Models\Kategori;
 use App\Models\Produk;
 use App\Models\Cabang;
+use App\Models\Cluster;
 use App\Models\Gender;
 use App\Models\ProdukCabang;
 use App\Models\Resep;
+use App\Models\Ukuran;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -19,10 +21,12 @@ class ProductsController extends Controller
         $data = [
             'title' => 'Products',
             'kategori' => Kategori::orderBy('possition', 'ASC')->get(),
-            'produk' => Produk::orderBy('possition', 'ASC')->with(['kategori', 'produkCabang'])->where('hapus', 0)->get(),
+            'produk' => Produk::orderBy('possition', 'ASC')->with(['produkCabang', 'resep'])->where('hapus', 0)->get(),
             'bahan' => Bahan::orderBy('possition', 'ASC')->where('aktif', 'Y')->where('jenis', 1)->get(),
             'cabang' => Cabang::where('off', 0)->get(),
             'gender' => Gender::all(),
+            'ukuran' => Ukuran::all(),
+            'cluster' => Cluster::all(),
         ];
         // $produk = Produk::with(['kategori','getHarga.delivery'])->get();
         // dd($produk[0]);
@@ -50,12 +54,13 @@ class ProductsController extends Controller
 
 
             $data = [
-                'kategori_id' => $request->kategori_id,
                 'nm_produk' => $request->nm_produk,
-                'status' => $request->status,
-                'tampil_varian' => $request->tampil_varian,
-                'diskon ' => 0,
+                'gender_id' => $request->gender_id,
+                'brand' => $request->brand,
+                'ganti_nama' => $request->ganti_nama,
                 'foto' => $foto,
+                'diskon ' => 0,
+                'status' => 'ON',
                 'possition' => 0,
                 'hapus' => 0,
             ];
@@ -69,6 +74,23 @@ class ProductsController extends Controller
                 ProdukCabang::create([
                     'produk_id' => $produk->id,
                     'cabang_id' => $cabang_id[$count]
+                ]);
+            }
+
+            $takaran1 = $request->takaran1;
+            $takaran2 = $request->takaran2;
+            $cluster_id = $request->cluster_id;
+            $ukuran = $request->ukuran;
+            $harga = $request->harga;
+
+            for ($count = 0; $count < count($takaran1); $count++) {
+                Resep::create([
+                    'produk_id' => $produk->id,
+                    'takaran1' => $takaran1[$count],
+                    'takaran2' => $takaran2[$count],
+                    'cluster_id' => $cluster_id[$count],
+                    'ukuran' => $ukuran[$count],
+                    'harga' => $harga[$count] ? $harga[$count] : 0,
                 ]);
             }
 
@@ -89,16 +111,18 @@ class ProductsController extends Controller
                 $request->file('foto')->move('img-produk/', $request->file('foto')->getClientOriginalName());
                 $foto = 'img-produk/' . $request->file('foto')->getClientOriginalName();
                 $data = [
-                    'kategori_id' => $request->kategori_id,
                     'nm_produk' => $request->nm_produk,
-                    'status' => $request->status,
+                    'gender_id' => $request->gender_id,
+                    'brand' => $request->brand,
+                    'ganti_nama' => $request->ganti_nama,
                     'foto' => $foto
                 ];
             } else {
                 $data = [
-                    'kategori_id' => $request->kategori_id,
                     'nm_produk' => $request->nm_produk,
-                    'status' => $request->status,
+                    'gender_id' => $request->gender_id,
+                    'brand' => $request->brand,
+                    'ganti_nama' => $request->ganti_nama,
                 ];
             }
 
@@ -115,6 +139,36 @@ class ProductsController extends Controller
                     'produk_id' => $request->id,
                     'cabang_id' => $cabang_id[$count]
                 ]);
+            }
+
+            $takaran1 = $request->takaran1_add;
+            $takaran2 = $request->takaran2_add;
+            $cluster_id = $request->cluster_id_add;
+            $ukuran = $request->ukuran_add;
+            $harga = $request->harga_add;
+
+            if (!empty($takaran1)) {
+                for ($count = 0; $count < count($takaran1); $count++) {
+                    Resep::create([
+                        'produk_id' => $produk->id,
+                        'takaran1' => $takaran1[$count],
+                        'takaran2' => $takaran2[$count],
+                        'cluster_id' => $cluster_id[$count],
+                        'ukuran' => $ukuran[$count],
+                        'harga' => $harga[$count] ? $harga[$count] : 0,
+                    ]);
+                }
+            }
+
+            $resep_id = $request->resep_id;
+            $harga = $request->harga;
+
+            if (!empty($resep_id)) {
+                for ($count = 0; $count < count($resep_id); $count++) {
+                    Resep::where('id', $resep_id[$count])->update([
+                        'harga' => $harga[$count]
+                    ]);
+                }
             }
 
             return redirect(route('products'))->with('success', 'Data berhasil diupdate');

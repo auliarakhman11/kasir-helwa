@@ -9,5 +9,5 @@ class Cluster extends Model
 {
     use HasFactory;
     protected $table = 'cluster';
-    protected $fillable = ['nm_cluster'];
+    protected $fillable = ['nm_cluster', 'takaran1', 'takaran2'];
 }

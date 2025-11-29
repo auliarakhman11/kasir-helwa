@@ -15,4 +15,14 @@ class Produk extends Model
     {
         return $this->belongsTo(Gender::class, 'gender_id', 'id');
     }
+
+    public function produkCabang()
+    {
+        return $this->hasMany(ProdukCabang::class, 'produk_id', 'id');
+    }
+
+    public function resep()
+    {
+        return $this->hasMany(Resep::class, 'produk_id', 'id');
+    }
 }

@@ -55,9 +55,10 @@
                                     <thead>
                                         <tr>
                                             <th>#</th>
-                                            <th>Produk</th>
+                                            <th>Nama</th>
+                                            <th>Rename</th>
                                             <th>Gender</th>
-                                            <th>Grade</th>
+                                            <th>Brand</th>
                                             <th>Status</th>
                                             <th>Aksi</th>
                                         </tr>
@@ -70,15 +71,12 @@
                                             <tr>
                                                 <td>{{ $i++ }}</td>
                                                 <td>{{ $p->nm_produk }}</td>
+                                                <td>{{ $p->ganti_nama }}</td>
                                                 <td>{{ $p->gender->nm_gender }}</td>
+                                                <td>{{ $p->brand }}</td>
                                                 <td class="{{ $p->status == 'ON' ? 'text-success' : 'text-danger' }}">
                                                     {{ $p->status }}</td>
                                                 <td>
-                                                    <button type="button" class="btn btn-sm btn-warning resep"
-                                                        data-bs-toggle="modal" data-bs-target="#resep"
-                                                        produk-id="{{ $p->id }}" nm-produk="{{ $p->nm_produk }}">
-                                                        Resep
-                                                    </button>
                                                     <button type="button" class="btn btn-sm btn-primary"
                                                         data-bs-toggle="modal"
                                                         data-bs-target="#edit-product{{ $p->id }}">
@@ -158,7 +156,7 @@
                                         </select>
                                     </div>
 
-                                    <div class="col-lg-6 mb-2">
+                                    {{-- <div class="col-lg-6 mb-2">
                                         <label for="">
                                             <dt>Status</dt>
                                         </label>
@@ -166,11 +164,64 @@
                                             <option value="ON">ON</option>
                                             <option value="OFF">OFF</option>
                                         </select>
+                                    </div> --}}
+
+                                    <div class="col-12">
+                                        <hr class="bg-primary">
                                     </div>
 
-                                    <div class="col-12 text-center"><label for="">
+                                    <div class="col-12 text-center">
+                                        <label for="">
+                                            <dt>Resep</dt>
+                                        </label>
+                                    </div>
+
+                                    <div class="col-12">
+                                        <table class="table table-sm table-bordered" style="font-size: 12px;">
+                                            <tbody>
+                                                <tr>
+                                                    <td></td>
+                                                    @foreach ($cluster as $c)
+                                                        <td class="text-center"><b>{{ $c->nm_cluster }}</b></td>
+                                                    @endforeach
+                                                </tr>
+                                                @foreach ($ukuran as $index => $u)
+                                                    <tr {{ ($index + 1) % 2 == 0 ? 'class="bg-primary"' : '' }}>
+                                                        <td>{{ $u->ukuran }}ml</td>
+                                                        @foreach ($cluster as $c)
+                                                            <input type="hidden" name="cluster_id[]"
+                                                                value="{{ $c->id }}">
+                                                            <input type="hidden" name="ukuran[]"
+                                                                value="{{ $u->ukuran }}">
+                                                            <input type="hidden" name="takaran1[]"
+                                                                value="{{ $c->takaran1 }}">
+                                                            <input type="hidden" name="takaran2[]"
+                                                                value="{{ $c->takaran2 }}">
+                                                            <td>
+                                                                <input type="number" class="form-control form-control-sm"
+                                                                    name="harga[]" placeholder="harga">
+                                                            </td>
+                                                        @endforeach
+                                                    </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                    <div class="col-12">
+                                        <hr class="bg-primary">
+                                    </div>
+
+
+                                    <div class="col-12">
+                                        <hr class="bg-primary">
+                                    </div>
+
+                                    <div class="col-12 text-center">
+                                        <label for="">
                                             <dt>Outlet</dt>
-                                        </label></div>
+                                        </label>
+                                    </div>
 
                                     @foreach ($cabang as $k)
                                         <div class="col-4">
@@ -180,13 +231,18 @@
                                         </div>
                                     @endforeach
 
+                                    <div class="col-12">
+                                        <hr class="bg-primary">
+                                    </div>
+
                                 </div>
                             </div>
 
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary waves-effect" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-secondary waves-effect"
+                            data-bs-dismiss="modal">Close</button>
                         <button type="submit" class="btn btn-primary waves-effect waves-light">Save</button>
                     </div>
                 </div><!-- /.modal-content -->
@@ -211,84 +267,188 @@
                             </button>
                         </div>
                         <div class="modal-body">
-
-                            <div class="row">
-                                <input type="hidden" name="id" value="{{ $p->id }}">
+                            <div class="row form-group ">
                                 {{-- <div class="col-sm-4">
-                                    <label for="">Masukkan Gambar</label>
-                                    <input type="file" class="dropify text-sm"
-                                        data-default-file="{{ asset('') }}{{ $p->foto }}" name="foto"
-                                        placeholder="Image">
-                                </div> --}}
+                                <label for="">Masukkan Gambar</label>
+                                <input type="file" class="dropify text-sm"
+                                    data-default-file="{{ asset('img') }}/kebabyasmin.jpeg" name="foto"
+                                    placeholder="Image" required>
+                            </div> --}}
+
+                                <input type="hidden" name="id" value="{{ $p->id }}">
                                 <div class="col-12">
                                     <div class="form-group row">
                                         <div class="col-lg-6 mb-2">
                                             <label for="">
                                                 <dt>Nama Produk</dt>
                                             </label>
-                                            <input type="text" name="nm_produk" value="{{ $p->nm_produk }}"
-                                                class="form-control" placeholder="Nama Produk" required>
+                                            <input type="text" name="nm_produk" class="form-control"
+                                                value="{{ $p->nm_produk }}" required>
                                         </div>
 
                                         <div class="col-lg-6 mb-2">
                                             <label for="">
-                                                <dt>Kategori</dt>
+                                                <dt>Rename</dt>
                                             </label>
-                                            <select name="kategori_id" class="form-control" required>
-                                                @foreach ($kategori as $k)
-                                                    <option value="{{ $k->id }}"
-                                                        {{ $k->id == $p->kategori->id ? 'selected' : '' }}>
-                                                        {{ $k->kategori }}</option>
+                                            <input type="text" name="ganti_nama" class="form-control"
+                                                value="{{ $p->ganti_nama }}" required>
+                                        </div>
+
+                                        <div class="col-lg-6 mb-2">
+                                            <label for="">
+                                                <dt>Brand</dt>
+                                            </label>
+                                            <input type="text" name="brand" class="form-control"
+                                                value="{{ $p->brand }}" required>
+                                        </div>
+
+                                        <div class="col-lg-6 mb-2">
+                                            <label for="">
+                                                <dt>Gender</dt>
+                                            </label>
+                                            <select name="gender_id" class="form-control" required>
+                                                @foreach ($gender as $d)
+                                                    <option value="{{ $d->id }}"
+                                                        {{ $d->id == $p->gender_id ? 'selected' : '' }}>
+                                                        {{ $d->nm_gender }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
 
+                                        {{-- <div class="col-lg-6 mb-2">
+                                        <label for="">
+                                            <dt>Status</dt>
+                                        </label>
+                                        <select name="status" class="form-control" required>
+                                            <option value="ON">ON</option>
+                                            <option value="OFF">OFF</option>
+                                        </select>
+                                    </div> --}}
 
-                                        <div class="col-lg-6 mb-2">
-                                            <label for="">
-                                                <dt>Status</dt>
-                                            </label>
-                                            <select name="status" class="form-control" required>
-                                                <option value="ON" {{ $p->status == 'ON' ? 'selected' : '' }}>ON
-                                                </option>
-                                                <option value="OFF" {{ $p->status == 'OFF' ? 'selected' : '' }}>OFF
-                                                </option>
-                                            </select>
+                                        <div class="col-12">
+                                            <hr class="bg-primary">
                                         </div>
 
-                                        <div class="col-12 text-center"><label for="">
-                                                <dt>Outlet</dt>
-                                            </label></div>
                                         @php
-                                            $dtProdukCabang = [];
+                                            $dat = $p->resep;
                                         @endphp
-                                        @if ($p->produkCabang)
-                                            @foreach ($p->produkCabang as $pk)
-                                                @php
-                                                    $dtProdukCabang[] = $pk->cabang_id;
-                                                @endphp
-                                            @endforeach
-                                        @endif
 
+                                        <div class="col-12 text-center">
+                                            <label for="">
+                                                <dt>Resep</dt>
+                                            </label>
+                                        </div>
+
+                                        <div class="col-12">
+                                            <table class="table table-sm table-bordered" style="font-size: 12px;">
+                                                <tbody>
+                                                    <tr>
+                                                        <td></td>
+                                                        @foreach ($cluster as $c)
+                                                            <td class="text-center"><b>{{ $c->nm_cluster }}</b></td>
+                                                        @endforeach
+                                                    </tr>
+                                                    @foreach ($ukuran as $index => $u)
+                                                        <tr {{ ($index + 1) % 2 == 0 ? 'class="bg-primary"' : '' }}>
+                                                            <td>{{ $u->ukuran }}ml</td>
+                                                            @foreach ($cluster as $c)
+                                                                <td>
+                                                                    @if ($p->resep)
+                                                                        @php
+                                                                            $cek = $dat
+                                                                                ->where('cluster_id', $c->id)
+                                                                                ->where('ukuran', $u->ukuran)
+                                                                                ->where('takaran1', $c->takaran1)
+                                                                                ->where('takaran2', $c->takaran2)
+                                                                                ->first();
+                                                                            if ($cek) {
+                                                                                $resep_id = $cek->id;
+                                                                                $harga = $cek->harga;
+                                                                            } else {
+                                                                                $resep_id = 0;
+                                                                                $harga = 0;
+                                                                            }
+                                                                        @endphp
+                                                                        <input type="hidden" name="resep_id[]"
+                                                                            value="{{ $resep_id }}">
+                                                                        <input type="number"
+                                                                            class="form-control form-control-sm"
+                                                                            name="harga[]" placeholder="harga"
+                                                                            value="{{ $harga }}">
+                                                                    @else
+                                                                        <input type="hidden" name="cluster_id_add[]"
+                                                                            value="{{ $c->id }}">
+                                                                        <input type="hidden" name="ukuran_add[]"
+                                                                            value="{{ $u->ukuran }}">
+                                                                        <input type="hidden" name="takaran1_add[]"
+                                                                            value="{{ $c->takaran1 }}">
+                                                                        <input type="hidden" name="takaran2_add[]"
+                                                                            value="{{ $c->takaran2 }}">
+                                                                        <input type="number"
+                                                                            class="form-control form-control-sm"
+                                                                            name="harga_add[]" placeholder="harga">
+                                                                    @endif
+
+
+
+
+                                                                </td>
+                                                            @endforeach
+                                                        </tr>
+                                                    @endforeach
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+                                        <div class="col-12">
+                                            <hr class="bg-primary">
+                                        </div>
+
+
+                                        <div class="col-12">
+                                            <hr class="bg-primary">
+                                        </div>
+
+                                        <div class="col-12 text-center">
+                                            <label for="">
+                                                <dt>Outlet</dt>
+                                            </label>
+                                        </div>
+
+                                        @php
+                                            $dat_c = $p->produkCabang;
+                                        @endphp
 
                                         @foreach ($cabang as $k)
+                                            @php
+                                                if ($dat_c) {
+                                                    $check = $dat_c->where('cabang_id', $k->id)->first();
+                                                    if ($check) {
+                                                        $checked = 1;
+                                                    } else {
+                                                        $checked = null;
+                                                    }
+                                                } else {
+                                                    $checked = null;
+                                                }
+
+                                            @endphp
                                             <div class="col-4">
-                                                <label for="{{ $k->nama . $k->id . $p->id }}"><input
-                                                        id="{{ $k->nama . $k->id . $p->id }}" type="checkbox"
-                                                        value="{{ $k->id }}" name="cabang_id[]"
-                                                        {{ in_array($k->id, $dtProdukCabang) ? 'checked' : '' }}>
+                                                <label for="{{ $k->nama . $k->id }}"><input type="checkbox"
+                                                        id="{{ $k->nama . $k->id }}" value="{{ $k->id }}"
+                                                        name="cabang_id[]" {{ $checked != null ? 'checked' : '' }}>
                                                     {{ $k->nama }}</label>
                                             </div>
                                         @endforeach
 
-
-
+                                        <div class="col-12">
+                                            <hr class="bg-primary">
+                                        </div>
 
                                     </div>
                                 </div>
 
                             </div>
-
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
