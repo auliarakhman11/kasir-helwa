@@ -25,8 +25,8 @@ class ProductsController extends Controller
             'bahan' => Bahan::orderBy('possition', 'ASC')->where('aktif', 'Y')->where('jenis', 1)->get(),
             'cabang' => Cabang::where('off', 0)->get(),
             'gender' => Gender::all(),
-            'ukuran' => Ukuran::all(),
-            'cluster' => Cluster::all(),
+            'ukuran' => Ukuran::where('void', 0)->get(),
+            'cluster' => Cluster::where('void', 0)->get(),
         ];
         // $produk = Produk::with(['kategori','getHarga.delivery'])->get();
         // dd($produk[0]);

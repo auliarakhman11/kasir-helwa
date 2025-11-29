@@ -9,5 +9,5 @@ class Ukuran extends Model
 {
     use HasFactory;
     protected $table = 'ukuran';
-    protected $fillable = ['ukuran'];
+    protected $fillable = ['ukuran', 'void'];
 }
