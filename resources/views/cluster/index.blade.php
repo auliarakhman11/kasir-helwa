@@ -47,7 +47,7 @@
         <div class="page-content-wrapper">
             <div class="container-fluid">
                 <div class="row justify-content-center">
-                    <div class="col-8">
+                    <div class="col-md-8 col-12">
                         <div class="card">
                             <div class="card-body">
                                 <table id="datatable" class="tabledt-responsive nowrap"
