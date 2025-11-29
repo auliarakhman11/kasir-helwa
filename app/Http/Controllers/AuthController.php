@@ -13,7 +13,10 @@ class AuthController extends Controller
 {
     public function login_page()
     {
-        return view('auth.login', ['title' => 'Login Page']);
+        return view('auth.login', [
+            'title' => 'Login Page',
+            'user' => User::all(),
+        ]);
     }
 
     public function login(Request $request)
@@ -43,7 +46,7 @@ class AuthController extends Controller
                 // dd($user);
                 Auth::login($user);
 
-                return redirect(route('home'));
+                return redirect(route('kasir'));
             } else {
                 throw ValidationException::withMessages([
                     'password' => 'Password salah'

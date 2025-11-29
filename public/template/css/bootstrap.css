@@ -11869,9 +11869,7 @@ textarea.form-control-lg {
   --bs-light-rgb: 73, 80, 87;
   --bs-dark: #495057;
   --bs-dark-rgb: 73, 80, 87;
-  --bs-header-bg: #27333a;
-  --bs-header-item-color: #fff;
-  --bs-topbar-search-bg: #2b3840;
+  --bs-header-item-color: #27333a;
   --bs-top-tagbar-bg: #2641a9;
   --bs-header-item-sub-color: var(--bs-secondary-color);
   --bs-footer-bg: #27333a;

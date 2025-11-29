@@ -67,9 +67,16 @@
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="form-group form-group-custom mb-4">
-                                                <input type="text" class="form-control" id="username"
-                                                    name="username" value="{{ old('username') }}" required>
-                                                <label for="username">User Name</label>
+                                                {{-- <input type="text" class="form-control" id="username"
+                                                    name="username" value="{{ old('username') }}" required> --}}
+                                                <select name="username" class="form-control">
+                                                    <option value="">Pilih Cabang</option>
+                                                    @foreach ($user as $d)
+                                                        <option value="{{ $d->username }}">{{ $d->name }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                                {{-- <label for="username">User Name</label> --}}
                                             </div>
 
                                             <div class="form-group form-group-custom mb-4">

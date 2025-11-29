@@ -239,11 +239,14 @@ body[data-topbar=colored] .noti-icon i {
   color: var(--bs-header-dark-item-color);
 }
 
-[data-bs-theme=dark] [data-topbar=colored] .navbar-brand-box .logo-dark {
-  display: none;
+[data-bs-theme=dark] [data-topbar=colored] .navbar-brand-box .logo-dark .logo-lg {
+  display: none !important;
 }
 [data-bs-theme=dark] [data-topbar=colored] .navbar-brand-box .logo-light {
   display: block;
+}
+[data-bs-theme=dark] [data-topbar=colored] .navbar-brand-box .logo-light .logo-lg {
+  display: block !important;
 }
 
 @media (max-width: 380px) {
@@ -658,10 +661,10 @@ body[data-sidebar=dark] .navbar-brand-box {
   background: var(--bs-sidebar-dark-bg);
 }
 body[data-sidebar=dark] .logo-dark {
-  display: none;
+  display: var(--bs-logo-light-display);
 }
 body[data-sidebar=dark] .logo-light {
-  display: block;
+  display: var(--bs-logo-dark-display);
 }
 body[data-sidebar=dark] .vertical-menu {
   background: var(--bs-sidebar-dark-bg);

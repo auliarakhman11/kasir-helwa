@@ -2,12 +2,7 @@
 
 
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\BahanController;
-use App\Http\Controllers\ClusterController;
-use App\Http\Controllers\HomeController;
-use App\Http\Controllers\ProductsController;
-use App\Http\Controllers\UkuranController;
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\KasirController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -37,49 +32,8 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth')->group(function () {
 
     //home
-    Route::get('/', [HomeController::class, 'index'])->name('home');
+    Route::get('/', [KasirController::class, 'index'])->name('kasir');
     //end home
-
-    Route::middleware('hakakses:1')->group(function () {
-
-        Route::get('bahan', [BahanController::class, 'index'])->name('bahan');
-        Route::post('addBahan', [BahanController::class, 'addBahan'])->name('addBahan');
-        Route::patch('editBahan', [BahanController::class, 'editBahan'])->name('editBahan');
-        Route::patch('dropDataBahan', [BahanController::class, 'dropDataBahan'])->name('dropDataBahan');
-
-
-        //produk
-        Route::get('/products', [ProductsController::class, 'index'])->name('products');
-        Route::post('/products', [ProductsController::class, 'addProduct'])->name('addProduct');
-        Route::patch('/produk', [ProductsController::class, 'editProduk'])->name('editProduk');
-
-        Route::post('/add-resep', [ProductsController::class, 'addResep'])->name('addResep');
-
-        Route::post('/drop-resep', [ProductsController::class, 'dropResep'])->name('dropResep');
-
-        Route::post('/sort-produk', [ProductsController::class, 'sortProduk'])->name('sortProduk');
-
-        Route::get('/delete-produk/{id}', [ProductsController::class, 'deleteProduk'])->name('deleteProduk');
-
-        Route::get('getHargaResep/{produk_id}', [ProductsController::class, 'getHargaResep'])->name('getHargaResep');
-        //end produk
-
-        //ukuran
-        Route::get('ukuran', [UkuranController::class, 'index'])->name('ukuran');
-        Route::post('addUkuran', [UkuranController::class, 'addUkuran'])->name('addUkuran');
-        Route::patch('editUkuran', [UkuranController::class, 'editUkuran'])->name('editUkuran');
-        Route::get('deleteUkuran/{ukuran}', [UkuranController::class, 'deleteUkuran'])->name('deleteUkuran');
-        //end ukuran
-
-        //Cluster
-        Route::get('cluster', [ClusterController::class, 'index'])->name('cluster');
-        Route::post('addCluster', [ClusterController::class, 'addCluster'])->name('addCluster');
-        Route::patch('editCluster', [ClusterController::class, 'editCluster'])->name('editCluster');
-        Route::get('deleteCluster/{Cluster}', [ClusterController::class, 'deleteCluster'])->name('deleteCluster');
-        //end Cluster
-
-    });
-
 
     //block
     Route::get('forbidden-access', [AuthController::class, 'block'])->name('block');

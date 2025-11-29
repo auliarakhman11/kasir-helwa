@@ -3,30 +3,13 @@
 
 <head>
     <meta charset="utf-8" />
-    <title>Dashboard | Xoric - Responsive Bootstrap 4 Admin Dashboard</title>
+    <title>Cards | Xoric - Responsive Bootstrap 4 Admin Dashboard</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
     <meta content="Themesdesign" name="author" />
     <!-- App favicon -->
     <link rel="shortcut icon" href="{{ asset('template') }}/images/favicon.ico">
-
-    <!-- datepicker -->
-    <link href="{{ asset('template') }}/libs/air-datepicker/air-datepicker.css" rel="stylesheet" type="text/css" />
-
-    <!-- jvectormap -->
-    <link href="{{ asset('template') }}/libs/jqvmap/jqvmap.min.css" rel="stylesheet" />
-
-    <!-- DataTables -->
-    <link href="{{ asset('template') }}/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet"
-        type="text/css" />
-    {{-- <link href="{{ asset('template') }}/libs/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css" rel="stylesheet"
-        type="text/css" /> --}}
-
-    <!-- Responsive datatable examples -->
-    <link href="{{ asset('template') }}/libs/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css"
-        rel="stylesheet" type="text/css" />
 
     <!-- Sweet Alert-->
     <link href="{{ asset('template') }}/libs/sweetalert2/sweetalert2.min.css" rel="stylesheet" type="text/css" />
@@ -40,22 +23,22 @@
 
 </head>
 
-<body data-topbar="colored">
+<body data-topbar="colored" data-layout="horizontal" data-layout-size="boxed">
 
     <!-- Begin page -->
     <div id="layout-wrapper">
 
         @include('template._navbar')
 
-        <!-- ========== Left Sidebar Start ========== -->
-        @include('template._sidebar')
-        <!-- Left Sidebar End -->
-
         <!-- ============================================================== -->
         <!-- Start right Content here -->
         <!-- ============================================================== -->
         <div class="main-content">
+
             @yield('content')
+            <!-- End Page-content -->
+
+
             <footer class="footer">
                 <div class="container-fluid">
                     <div class="row">
@@ -64,7 +47,8 @@
                         </div>
                         <div class="col-sm-6">
                             <div class="text-sm-end d-none d-sm-block">
-                                Crafted with <i class="mdi mdi-heart text-danger"></i> by Themesdesign
+                                Crafted with <i class="mdi mdi-heart text-danger"></i> by
+                                <a href="https://1.envato.market/themesdesign" target="_blank">Themesdesign</a>
                             </div>
                         </div>
                     </div>
@@ -435,32 +419,6 @@
     <script src="{{ asset('template') }}/libs/node-waves/waves.min.js"></script>
 
     <script src="https://unicons.iconscout.com/release/v2.0.1/script/monochrome/bundle.js"></script>
-
-    <!-- datepicker -->
-    <script src="{{ asset('template') }}/libs/air-datepicker/js/datepicker.min.js"></script>
-    <script src="{{ asset('template') }}/libs/air-datepicker/js/i18n/datepicker.en.js"></script>
-
-    <!-- apexcharts -->
-    <script src="{{ asset('template') }}/libs/apexcharts/apexcharts.min.js"></script>
-
-    <script src="{{ asset('template') }}/libs/jquery-knob/jquery.knob.min.js"></script>
-
-    <!-- Jq vector map -->
-    <script src="{{ asset('template') }}/libs/jqvmap/jquery.vmap.min.js"></script>
-    <script src="{{ asset('template') }}/libs/jqvmap/maps/jquery.vmap.usa.js"></script>
-
-    {{-- <script src="{{ asset('template') }}/js/pages/dashboard.init.js"></script> --}}
-
-    <!-- Required datatable js -->
-    <script src="{{ asset('template') }}/libs/datatables.net/js/jquery.dataTables.min.js"></script>
-    <script src="{{ asset('template') }}/libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
-
-    <!-- Responsive examples -->
-    <script src="{{ asset('template') }}/libs/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
-    <script src="{{ asset('template') }}/libs/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js"></script>
-
-    <!-- Datatable init js -->
-    <script src="{{ asset('template') }}/js/pages/datatables.init.js"></script>
 
     <!-- Sweet Alerts js -->
     <script src="{{ asset('template') }}/libs/sweetalert2/sweetalert2.min.js"></script>
