@@ -14,6 +14,9 @@
     <!-- Sweet Alert-->
     <link href="{{ asset('template') }}/libs/sweetalert2/sweetalert2.min.css" rel="stylesheet" type="text/css" />
 
+    <!-- Lightbox css -->
+    <link href="{{ asset('template') }}/libs/magnific-popup/magnific-popup.css" rel="stylesheet" type="text/css" />
+
     <!-- Bootstrap Css -->
     <link href="{{ asset('template') }}/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
     <!-- Icons Css -->
@@ -43,14 +46,14 @@
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-sm-6">
-                            2020 © Xoric.
+                            2025 © Helwa Parfum.
                         </div>
-                        <div class="col-sm-6">
+                        {{-- <div class="col-sm-6">
                             <div class="text-sm-end d-none d-sm-block">
                                 Crafted with <i class="mdi mdi-heart text-danger"></i> by
                                 <a href="https://1.envato.market/themesdesign" target="_blank">Themesdesign</a>
                             </div>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
             </footer>
@@ -425,6 +428,14 @@
 
     <!-- Sweet alert init js-->
     <script src="{{ asset('template') }}/js/pages/sweet-alerts.init.js"></script>
+
+    <!-- Isotope Filter -->
+    <script src="{{ asset('template') }}/libs/isotope-layout/isotope.pkgd.min.js"></script>
+
+    <!-- Magnific Popup-->
+    <script src="{{ asset('template') }}/libs/magnific-popup/jquery.magnific-popup.min.js"></script>
+
+    <script src="{{ asset('template') }}/js/pages/gallery.init.js"></script>
 
     <script src="{{ asset('template') }}/js/app.js"></script>
 

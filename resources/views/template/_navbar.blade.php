@@ -3,7 +3,7 @@
         <div class="container-fluid">
             <div class="float-end">
 
-                <div class="dropdown d-inline-block  ms-2">
+                {{-- <div class="dropdown d-inline-block  ms-2">
                     <a class=" header-item noti-icon" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
                         id="page-header-search-dropdown">
                         <i class="mdi mdi-magnify align-middle"></i>
@@ -26,7 +26,7 @@
                     <button type="button" class="btn header-item noti-icon right-bar-toggle waves-effect">
                         <i class="mdi mdi-tune"></i>
                     </button>
-                </div>
+                </div> --}}
 
                 <!-- light dark btn -->
                 <div class="dropdown d-none d-sm-inline-block">
@@ -40,12 +40,12 @@
                         data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <img class="rounded-circle header-profile-user"
                             src="{{ asset('template') }}/images/users/avatar-1.jpg" alt="Header Avatar">
-                        <span class="d-none d-sm-inline-block ml-1">Smith</span>
+                        <span class="d-none d-sm-inline-block ml-1">{{ Auth::user()->name }}</span>
                         <i class="mdi mdi-chevron-down d-none d-sm-inline-block"></i>
                     </button>
                     <div class="dropdown-menu dropdown-menu-right">
                         <!-- item-->
-                        <a class="dropdown-item" href="#"><i
+                        {{-- <a class="dropdown-item" href="#"><i
                                 class="mdi mdi-face-profile font-size-16 align-middle mr-1"></i> Profile</a>
                         <a class="dropdown-item" href="#"><i
                                 class="mdi mdi-credit-card-outline font-size-16 align-middle mr-1"></i> Billing</a>
@@ -53,8 +53,8 @@
                                 class="mdi mdi-account-settings font-size-16 align-middle mr-1"></i> Settings</a>
                         <a class="dropdown-item" href="#"><i
                                 class="mdi mdi-lock font-size-16 align-middle mr-1"></i> Lock screen</a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="#"><i
+                        <div class="dropdown-divider"></div> --}}
+                        <a class="dropdown-item" href="{{ route('logout') }}"><i
                                 class="mdi mdi-logout font-size-16 align-middle mr-1"></i> Logout</a>
                     </div>
                 </div>
@@ -64,19 +64,19 @@
             <div class="navbar-brand-box">
                 <a href="index.html" class="logo logo-dark">
                     <span class="logo-sm">
-                        <img src="{{ asset('template') }}/images/logo-sm-dark.png" alt="" height="22">
+                        <img src="{{ asset('img') }}/helwa.png" alt="" height="22">
                     </span>
                     <span class="logo-lg">
-                        <img src="{{ asset('template') }}/images/logo-dark.png" alt="" height="20">
+                        <img src="{{ asset('img') }}/helwa.png" alt="" height="20">
                     </span>
                 </a>
 
                 <a href="index.html" class="logo logo-light">
                     <span class="logo-sm">
-                        <img src="{{ asset('template') }}/images/logo-sm-light.png" alt="" height="22">
+                        <img src="{{ asset('img') }}/helwa.png" alt="" height="22">
                     </span>
                     <span class="logo-lg">
-                        <img src="{{ asset('template') }}/images/logo-light.png" alt="" height="20">
+                        <img src="{{ asset('img') }}/helwa.png" alt="" height="20">
                     </span>
                 </a>
             </div>
@@ -92,12 +92,12 @@
                     <div class="collapse navbar-collapse" id="topnav-menu-content">
                         <ul class="navbar-nav">
                             <li class="nav-item">
-                                <a class="nav-link" href="index.html">
-                                    Dashboard
+                                <a class="nav-link" href="">
+                                    Kasir
                                 </a>
                             </li>
 
-                            <li class="nav-item dropdown">
+                            {{-- <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle arrow-none" href="#" id="topnav-uielement"
                                     role="button" data-toggle="dropdown" aria-haspopup="true"
                                     aria-expanded="false">
@@ -324,7 +324,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </li>
+                            </li> --}}
 
                         </ul>
                     </div>
