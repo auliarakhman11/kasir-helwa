@@ -43,26 +43,35 @@
                 <div class="card">
 
                     <div class="card-body">
-                        <div class="row">
-                            <ul class="col list-inline gallery-categories-filter text-center" id="filter">
+                        <div class="row justify-content-center">
+                            <div class="col-10">
+                                <input type="text" id="search_field" class=" form-control" placeholder="Cari Produk...">
+                            </div>
+                            <ul class="col-12 list-inline gallery-categories-filter text-center" id="filter">
                                 <li class="list-inline-item"><a class="categories active" data-filter="*">All</a></li>
                                 @foreach ($gender as $g)
                                     <li class="list-inline-item"><a class="categories"
                                             data-filter=".{{ str_replace(' ', '', $g->nm_gender) }}">{{ $g->nm_gender }}</a>
                                     </li>
                                 @endforeach
+                                @foreach ($kategori as $k)
+                                    <li class="list-inline-item"><a class="categories"
+                                            data-filter=".{{ str_replace(' ', '', $k->kategori) }}">{{ $k->kategori }}</a>
+                                    </li>
+                                @endforeach
                             </ul>
                         </div>
-                        <div class="row container-grid projects-wrapper">
+                        <div class="row justtify-content-center container-grid projects-wrapper" id="demonames">
                             @foreach ($produk as $d)
-                                <div class="col-md-2 col-4 {{ str_replace(' ', '', $d->gender->nm_gender) }}">
-                                    <a href="javascript:void(0)" data-bs-toggle="modal"
-                                        data-bs-target="#modal_detail{{ $d->id }}">
+                                <div
+                                    class="col-4 {{ str_replace(' ', '', $d->gender->nm_gender) }} {{ str_replace(' ', '', $d->kategori->kategori) }}">
+                                    <a href="#modal_detail{{ $d->id }}" data-bs-toggle="modal">
                                         <div class="card bg-primary">
                                             <img class="card-img-top img-fluid mt-2" src="{{ asset('img') }}/parfume.png"
                                                 style="max-height: 150px;" alt="Card image cap">
                                             <div class="card-body">
-                                                <h4 class="card-title font-size-16 mt-0 text-white">{{ $d->nm_produk }}</h4>
+                                                <h4 class="card-title font-size-16 mt-0 text-white demoname">
+                                                    {{ $d->nm_produk }}</h4>
                                                 {{-- <p class="card-text">Some quick example text to build on the card title and make
                                             up the bulk of the card's content.</p>
                                         <a href="#" class="btn btn-primary waves-effect waves-light">Button</a> --}}
@@ -140,6 +149,37 @@
                 timer: 1500
             });
             <?php endif; ?>
+
+            var btsearch = {
+                init: function(search_field, searchable_elements, searchable_text_class) {
+                    $(search_field).keyup(function(e) {
+                        e.preventDefault();
+                        var query = $(this).val().toLowerCase();
+                        if (query) {
+                            // loop through all elements to find match
+                            $.each($(searchable_elements), function() {
+                                var title = $(this).find(searchable_text_class).text()
+                                    .toLowerCase();
+                                if (title.indexOf(query) == -1) {
+                                    $(this).hide();
+                                } else {
+                                    $(this).show();
+                                }
+                            });
+                        } else {
+                            // empty query so show everything
+                            $(searchable_elements).show();
+                        }
+                    });
+                }
+            }
+
+            // INIT
+            $(function() {
+
+                btsearch.init('#search_field', '#demonames div', '.demoname');
+            });
+            //end search
 
 
 
