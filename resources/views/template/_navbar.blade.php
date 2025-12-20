@@ -30,8 +30,11 @@
 
                 <!-- light dark btn -->
                 <div class="dropdown d-none d-sm-inline-block">
-                    <button type="button" class="btn header-item " id="light-dark-mode">
+                    <button type="button" class="btn header-item" id="light-dark-mode">
                         <i class="mdi mdi-moon-waning-crescent align-middle fs-4"></i>
+                    </button>
+                    <button type="button" class="btn header-item" data-bs-toggle="modal" data-bs-target="#modal_cart">
+                        <i class="mdi mdi-cart-minus align-middle fs-4"></i>
                     </button>
                 </div>
 
