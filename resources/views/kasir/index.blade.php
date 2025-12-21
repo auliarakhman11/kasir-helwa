@@ -90,8 +90,7 @@
                                     <a href="#modal_detail{{ $d->id }}" data-bs-toggle="modal">
                                         <div class="card bg-primary">
                                             <img class="card-img-top img-fluid mt-2 lazy" loading="lazy"
-                                                src="{{ asset('img') }}/parfume.png" style="max-height: 150px;"
-                                                alt="Card image cap">
+                                                src="{{ asset('img') }}/helwa.jpg" alt="Card image cap">
                                             <div class="card-body">
                                                 <h4 class="card-title font-size-16 mt-0 text-white demoname">
                                                     {{ $d->nm_produk }}</h4>
@@ -140,8 +139,8 @@
                                         <label>
 
                                             <input type="radio" name="resep_id"
-                                                value="{{ $r->id }}|{{ $r->cluster->nm_cluster }}|{{ $r->ukuran }}|{{ $r->harga ? $r->harga : 0 }}"
-                                                class="card-input-element" />
+                                                value="{{ $r->id }}|{{ $r->cluster->nm_cluster }}|{{ $r->ukuran }}|{{ $r->harga ? $r->harga : 0 }}}|{{ $r->cluster_id }}"
+                                                class="card-input-element" required />
                                             <div class="card card-default card-input">
                                                 <div class="card-header">{{ $r->cluster->nm_cluster }} {{ $r->ukuran }}
                                                     ml<br>Rp.{{ number_format($r->harga, 0) }}
@@ -166,26 +165,29 @@
         </form>
     @endforeach
 
-    <div id="modal_cart" class="modal fade modal-cart" tabindex="-1" role="dialog" aria-labelledby="myModalLabelcart"
-        aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header bg-primary">
-                    <h5 class="modal-title text-white mt-0" id="myModalLabelcart">Keranjang</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                        <span class="mdi mdi-close"></span>
-                    </button>
-                </div>
-                <div class="modal-body" id="cart">
+    <form id="checkout">
+        <div id="modal_cart" class="modal fade modal-cart" tabindex="-1" role="dialog" aria-labelledby="myModalLabelcart"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header bg-primary">
+                        <h5 class="modal-title text-white mt-0" id="myModalLabelcart">Keranjang</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                            <span class="mdi mdi-close"></span>
+                        </button>
+                    </div>
+                    <div class="modal-body" id="cart">
 
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary waves-effect" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary waves-effect waves-light">Save</button>
-                </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary waves-effect" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary waves-effect waves-light"
+                            id="btn_checkout">Save</button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div>
+    </form>
 
 
 @section('script')
@@ -284,7 +286,7 @@
                         jml_produk += item['quantity'];
 
                         cart +=
-                            '<div class="col-4 mt-2 mb-2"><img src="{{ asset('img') }}/parfume.png" class="list-thumbnail border-0" width="130px;"/></div>';
+                            '<div class="col-4 mt-2 mb-2"><img src="{{ asset('img') }}/helwa1.jpg" class="list-thumbnail border-0" width="130px;"/></div>';
 
                         cart += '<div class="col-8 mt-2 mb-2"><div class="row">';
 
@@ -314,7 +316,7 @@
                         '</strong></div>';
 
                     cart +=
-                        '<div class="row justify-content-center"><div class="col-6"><label for="">Jenis Pembayaran</label><select name="pembayaran_id" class="form-control">@foreach ($pembayaran as $pm)<option value="{{ $pm->id }}">{{ $pm->pembayaran }}</option>@endforeach</select></div><div class="col-12"><hr></div></div><div class="row justify-content-center"> @foreach ($karyawan as $k)<div class="col-4"><label><input type="radio" name="karyawan_id" value="{{ $k->id }}" class="card-input-element"/><div class="card card-default card-input"><div class="card-header">{{ $k->nama }}</div></div></label></div>@endforeach</div>';
+                        '<hr class="bg-primary"><div class="row"><div class="col-6 mt-2"><label for="">Customer</label><input type="text" class="form-control" name="nm_customer" id="nm_customer" required></div><div class="col-6 mt-2"><label for="">Nomor WA</label><input type="text" class="form-control" name="no_tlp" id="no_tlp" required></div><div class="col-6 mt-2"><label for="">Jenis Pembayaran</label><select name="pembayaran_id" id="pembayaran_id" class="form-control">@foreach ($pembayaran as $pm)<option value="{{ $pm->id }}">{{ $pm->pembayaran }}</option>@endforeach</select></div><div class="col-12"><hr class="bg-primary"></div></div><center>Dilayani Oleh</center><div class="row justify-content-center"> @foreach ($karyawan as $k)<div class="col-4"><label><input type="radio" name="karyawan_id" value="{{ $k->id }}" class="card-input-element"/><div class="card card-default card-input"><div class="card-header">{{ $k->nama }}</div></div></label></div>@endforeach</div>';
 
 
                 }
@@ -340,6 +342,7 @@
                 let cluster_id = '';
                 let cluster = '';
                 let ukuran = '';
+                let resep_id = '';
 
                 let varian = [];
 
@@ -350,9 +353,10 @@
                     if (d.name == 'resep_id') {
                         const dat = d.value.split('|');
                         harga = dat[3];
-                        cluster_id = dat[0];
+                        cluster_id = dat[4];
                         cluster = dat[1];
-                        ukuran = dat[2]
+                        ukuran = dat[2];
+                        resep_id = dat[0]
                     }
 
                     if (d.name == 'id_produk') {
@@ -394,6 +398,7 @@
                     keep_item_price: false,
                     id_bujur: id_produk,
                     cluster_id: cluster_id,
+                    resep_id: resep_id,
                     cluster: cluster,
                     ukuran: ukuran,
                     diskon: 0,
@@ -435,6 +440,92 @@
 
                 ecomCart.increaseItemQnt(rowId, 1);
                 loadCart();
+
+            });
+
+            $(document).on('submit', '#checkout', function(event) {
+                event.preventDefault();
+
+                $('#btn_checkout').html(
+                    '<div class="spinner-border text-light" role="status"><span class="visually-hidden">Loading...</span></div>'
+                );
+                $('#btn_checkout').attr("disabled", true);
+
+                const nm_customer = $('#nm_customer').val();
+                const no_tlp = $('#no_tlp').val();
+                const pembayaran_id = $('#pembayaran_id').val();
+                const karyawan_id = $('input[name="karyawan_id"]:checked').val();
+
+                const cart = ecomCart.data.items;
+
+
+                $.ajax({
+                    url: "{{ route('checkout') }}",
+                    method: 'POST',
+                    data: {
+                        nm_customer: nm_customer,
+                        no_tlp: no_tlp,
+                        pembayaran_id: pembayaran_id,
+                        karyawan_id: karyawan_id,
+                        cart: cart
+                    },
+                    success: function(data) {
+                        if (data == 'kosong') {
+                            Swal.fire({
+                                position: "top-end",
+                                icon: "error",
+                                title: "Keranjang Kosong!",
+                                showConfirmButton: !1,
+                                timer: 1500
+                            });
+                            $('#btn_checkout').html('Save');
+                            $('#btn_checkout').removeAttr("disabled");
+                        } else if (data == 'karyawan') {
+                            Swal.fire({
+                                position: "top-end",
+                                icon: "error",
+                                title: "Pilih karyawan terlebih dahulu",
+                                showConfirmButton: !1,
+                                timer: 1500
+                            });
+
+                            $('#btn_checkout').html('Save');
+                            $('#btn_checkout').removeAttr("disabled");
+                        } else {
+                            ecomCart.clear();
+                            loadCart();
+
+                            $('#btn_checkout').html('Save');
+                            $('#btn_checkout').removeAttr("disabled");
+
+                            Swal.fire({
+                                position: "top-end",
+                                icon: "success",
+                                title: "Transaksi berhasil",
+                                showConfirmButton: !1,
+                                timer: 1500
+                            });
+
+                            $('#modal_cart').modal('hide');
+                            window.location.href = "{{ route('printNota') }}?inv=" + data;
+
+                        }
+                    },
+                    error: function(err) { //jika error tampilkan error pada console
+                        $('#btn_checkout').html('Save');
+                        $('#btn_checkout').removeAttr("disabled");
+                        Swal.fire({
+                            position: "top-end",
+                            icon: "error",
+                            title: "Error! ada masalah!",
+                            showConfirmButton: !1,
+                            timer: 1500
+                        });
+                        console.log(err);
+
+                    }
+                });
+
 
             });
 

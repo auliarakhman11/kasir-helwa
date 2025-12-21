@@ -33,6 +33,8 @@ Route::middleware('auth')->group(function () {
 
     //home
     Route::get('/', [KasirController::class, 'index'])->name('kasir');
+    Route::post('checkout', [KasirController::class, 'checkout'])->name('checkout');
+    Route::get('printNota', [KasirController::class, 'printNota'])->name('printNota');
     //end home
 
     //block

@@ -41,8 +41,8 @@
                 <div class="dropdown d-inline-block">
                     <button type="button" class="btn header-item waves-effect" id="page-header-user-dropdown"
                         data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <img class="rounded-circle header-profile-user"
-                            src="{{ asset('template') }}/images/users/avatar-1.jpg" alt="Header Avatar">
+                        <img class="rounded-circle header-profile-user" src="{{ asset('img') }}/helwa.png"
+                            alt="Header Avatar">
                         <span class="d-none d-sm-inline-block ml-1">{{ Auth::user()->name }}</span>
                         <i class="mdi mdi-chevron-down d-none d-sm-inline-block"></i>
                     </button>
@@ -67,19 +67,19 @@
             <div class="navbar-brand-box">
                 <a href="index.html" class="logo logo-dark">
                     <span class="logo-sm">
-                        <img src="{{ asset('img') }}/helwa.png" alt="" height="22">
+                        <img src="{{ asset('img') }}/helwa.jpg" alt="" height="50">
                     </span>
                     <span class="logo-lg">
-                        <img src="{{ asset('img') }}/helwa.png" alt="" height="20">
+                        <img src="{{ asset('img') }}/helwa.jpg" alt="" height="50">
                     </span>
                 </a>
 
                 <a href="index.html" class="logo logo-light">
                     <span class="logo-sm">
-                        <img src="{{ asset('img') }}/helwa.png" alt="" height="22">
+                        <img src="{{ asset('img') }}/helwa.jpg" alt="" height="50">
                     </span>
                     <span class="logo-lg">
-                        <img src="{{ asset('img') }}/helwa.png" alt="" height="20">
+                        <img src="{{ asset('img') }}/helwa.jpg" alt="" height="50">
                     </span>
                 </a>
             </div>

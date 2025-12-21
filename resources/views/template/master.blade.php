@@ -3,13 +3,13 @@
 
 <head>
     <meta charset="utf-8" />
-    <title>Cards | Xoric - Responsive Bootstrap 4 Admin Dashboard</title>
+    <title>{{ $title }} | Helwa Perfume</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
     <meta content="Themesdesign" name="author" />
     <!-- App favicon -->
-    <link rel="shortcut icon" href="{{ asset('template') }}/images/favicon.ico">
+    <link rel="shortcut icon" href="{{ asset('img') }}/helwa.jpg">
 
     <!-- Sweet Alert-->
     <link href="{{ asset('template') }}/libs/sweetalert2/sweetalert2.min.css" rel="stylesheet" type="text/css" />
@@ -46,7 +46,7 @@
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-sm-6">
-                            2025 © Helwa Parfum.
+                            2025 © Helwa Perfume.
                         </div>
                         {{-- <div class="col-sm-6">
                             <div class="text-sm-end d-none d-sm-block">
