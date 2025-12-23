@@ -14,6 +14,7 @@ use App\Models\Resep;
 use App\Models\Stok;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 
 class KasirController extends Controller
@@ -143,7 +144,7 @@ class KasirController extends Controller
                         Stok::create([
                             'invoice_id' => $dt_invoice->id,
                             'penjualan_id' => $penjualan_id->id,
-                            'produk_id' => $c['id_bujur'],
+                            'produk_id' => 0,
                             'cabang_id' => 1,
                             'qty' => $qty_alkohol,
                             'harga' => 0,
@@ -210,6 +211,63 @@ class KasirController extends Controller
             return view('kasir.nota', $data);
         } else {
             return redirect(route('kasir'))->with('error', 'Data nota tidak ditemukan!');
+        }
+    }
+
+    public function listInvoice()
+    {
+        $data = [
+            'title' => 'List Invoice',
+            'invoice' => InvoiceKasir::where('invoice_kasir.tgl', date('Y-m-d'))->where('invoice_kasir.void', 0)->with(['penjualan', 'penjualan.getMenu', 'penjualanKaryawan.karyawan', 'pembayaran'])->orderBy('invoice_kasir.pembayaran_id', 'ASC')->orderBy('invoice_kasir.id', 'DESC')->get(),
+        ];
+        return view('kasir.list_invoice', $data);
+    }
+
+    public function sendMessage()
+    {
+        $response = Http::withHeaders([
+            'Authorization' => 'Bearer poozSo0VnQobTGiYOhaAHjaeaF0kJs0zixyKFosFdoMTjstAxJ',
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+        ])
+            ->post('https://api.whatspie.com/messages', [
+                'device' => '62895704893952',
+                'receiver' => '6281346350676',
+                'type' => 'file',
+                'file_url' => 'https://kasir.kebabyasmin.id/pdf/INV260425I130B.pdf',
+                'message' => '📚 API Documentation v2.1\n\nLatest version with new endpoints and examples.',
+                'simulate_typing' => 1
+            ]);
+
+        // Cek jika request berhasil
+        if ($response->successful()) {
+            return response()->json(['message' => 'Message sent successfully', 'data' => $response->json()]);
+        } else {
+            return response()->json(['error' => 'Failed to send message', 'data' => $response->json()], $response->status());
+        }
+    }
+
+    public function sendMessage2()
+    {
+        $response = Http::withHeaders([
+            'Authorization' => 'Bearer poozSo0VnQobTGiYOhaAHjaeaF0kJs0zixyKFosFdoMTjstAxJ',
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+        ])
+            ->post('https://api.whatspie.com/messages', [
+                'device' => '6281346350676',
+                'receiver' => '62895704893952',
+                'type' => 'file',
+                'file_url' => 'https://kasir.kebabyasmin.id/pdf/INV260425I130B.pdf',
+                'message' => '📚 API Documentation v2.1\n\nLatest version with new endpoints and examples.',
+                'simulate_typing' => 1
+            ]);
+
+        // Cek jika request berhasil
+        if ($response->successful()) {
+            return response()->json(['message' => 'Message sent successfully', 'data' => $response->json()]);
+        } else {
+            return response()->json(['error' => 'Failed to send message', 'data' => $response->json()], $response->status());
         }
     }
 }

@@ -88,7 +88,7 @@
         @foreach ($dt_invoice->penjualan as $d)
             <tr class="huruf" style="margin-bottom: 2px;">
                 <td width="10%">{{ $d->qty }}</td>
-                <td width="70%">{{ ucwords($d->getMenu->nm_produk) }} ({{ $d->cluster->nm_cluster }})
+                <td width="70%">{{ ucwords($d->getMenu->ganti_nama) }} ({{ $d->cluster->nm_cluster }})
                     {{ $d->ukuran }} ml
 
                     <br>

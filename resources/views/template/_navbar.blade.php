@@ -95,66 +95,31 @@
                     <div class="collapse navbar-collapse" id="topnav-menu-content">
                         <ul class="navbar-nav">
                             <li class="nav-item">
-                                <a class="nav-link" href="">
+                                <a class="nav-link" href="{{ route('kasir') }}">
                                     Kasir
                                 </a>
                             </li>
 
-                            {{-- <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle arrow-none" href="#" id="topnav-uielement"
-                                    role="button" data-toggle="dropdown" aria-haspopup="true"
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle arrow-none" href="javascript:void(0)"
+                                    id="topnav-uielement" role="button" data-toggle="dropdown" aria-haspopup="true"
                                     aria-expanded="false">
-                                    Elements <div class="arrow-down"></div>
+                                    Penjualan <div class="arrow-down"></div>
                                 </a>
-                                <div class="dropdown-menu dropdown-mega-menu-xl px-2"
+                                <div class="dropdown-menu dropdown-mega-menu-md px-2"
                                     aria-labelledby="topnav-uielement">
                                     <div class="row">
-                                        <div class="col-lg-8">
+                                        <div class="col-6">
                                             <div class="dropdown-item-text font-weight-semibold font-size-16">
                                                 <div class="d-inline-block icons-sm me-1"><i class="uim uim-box"></i>
-                                                </div> UI Elements
+                                                </div> Penjualan
                                             </div>
 
                                             <div class="row">
-                                                <div class="col-lg-5">
-                                                    <a href="ui-alerts.html" class="dropdown-item">Alerts</a>
-                                                    <a href="ui-badge.html" class="dropdown-item">Badge</a>
-                                                    <a href="ui-buttons.html" class="dropdown-item">Buttons</a>
-                                                    <a href="ui-cards.html" class="dropdown-item">Cards</a>
-                                                    <a href="ui-dropdowns.html" class="dropdown-item">Dropdowns</a>
-                                                    <a href="ui-navs.html" class="dropdown-item">Navs</a>
+                                                <div class="col-lg-12">
+                                                    <a href="{{ route('listInvoice') }}"
+                                                        class="dropdown-item">Invoice</a>
                                                 </div>
-                                                <div class="col-lg-5">
-                                                    <div>
-                                                        <a href="ui-tabs-accordions.html" class="dropdown-item">Tabs
-                                                            &amp; Accordions</a>
-                                                        <a href="ui-modals.html" class="dropdown-item">Modals</a>
-                                                        <a href="ui-images.html" class="dropdown-item">Images</a>
-                                                        <a href="ui-progressbars.html" class="dropdown-item">Progress
-                                                            Bars</a>
-                                                        <a href="ui-pagination.html"
-                                                            class="dropdown-item">Pagination</a>
-                                                        <a href="ui-popover-tooltips.html"
-                                                            class="dropdown-item">Popover & Tooltips</a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-4">
-                                            <div class="dropdown-item-text font-weight-semibold font-size-16">
-                                                <div class="d-inline-block icons-sm me-1"><i
-                                                        class="uim uim-layer-group"></i></div> Advanced UI
-                                            </div>
-
-                                            <div>
-                                                <a href="advanced-alertify.html" class="dropdown-item">Alertify</a>
-                                                <a href="advanced-rating.html" class="dropdown-item">Rating</a>
-                                                <a href="advanced-nestable.html" class="dropdown-item">Nestable</a>
-                                                <a href="advanced-rangeslider.html" class="dropdown-item">Range
-                                                    Slider</a>
-                                                <a href="advanced-sweet-alert.html"
-                                                    class="dropdown-item">Sweet-Alert</a>
-                                                <a href="advanced-lightbox.html" class="dropdown-item">Lightbox</a>
                                             </div>
                                         </div>
 
@@ -163,7 +128,7 @@
                                 </div>
                             </li>
 
-                            <li class="nav-item dropdown">
+                            {{-- <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle arrow-none" href="#" id="topnav-components"
                                     role="button" data-toggle="dropdown" aria-haspopup="true"
                                     aria-expanded="false">
@@ -273,9 +238,9 @@
                                         </div>
                                     </div>
                                 </div>
-                            </li>
+                            </li> --}}
 
-                            <li class="nav-item dropdown">
+                            {{-- <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle arrow-none" href="#" id="topnav-more"
                                     role="button" data-toggle="dropdown" aria-haspopup="true"
                                     aria-expanded="false">

@@ -35,6 +35,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/', [KasirController::class, 'index'])->name('kasir');
     Route::post('checkout', [KasirController::class, 'checkout'])->name('checkout');
     Route::get('printNota', [KasirController::class, 'printNota'])->name('printNota');
+    Route::get('listInvoice', [KasirController::class, 'listInvoice'])->name('listInvoice');
+    Route::get('sendMessage', [KasirController::class, 'sendMessage'])->name('sendMessage');
+    Route::get('sendMessage2', [KasirController::class, 'sendMessage2'])->name('sendMessage2');
     //end home
 
     //block

@@ -70,30 +70,33 @@
                                 <input type="text" id="search_field" class=" form-control" placeholder="Cari Produk...">
                             </div>
                             <ul class="col-12 list-inline gallery-categories-filter text-center" id="filter">
-                                <li class="list-inline-item"><a class="categories active" data-filter="*">All</a></li>
+                                <li class="list-inline-item"><a class="categories boxselect active" data-filter="*"
+                                        kategori_id="all">All</a></li>
                                 @foreach ($gender as $g)
-                                    <li class="list-inline-item"><a class="categories"
+                                    <li class="list-inline-item"><a class="categories boxselect"
+                                            kategori_id="{{ str_replace(' ', '', $g->nm_gender) }}"
                                             data-filter=".{{ str_replace(' ', '', $g->nm_gender) }}">{{ $g->nm_gender }}</a>
                                     </li>
                                 @endforeach
                                 @foreach ($kategori as $k)
-                                    <li class="list-inline-item"><a class="categories"
+                                    <li class="list-inline-item"><a class="categories boxselect"
+                                            kategori_id="{{ str_replace(' ', '', $k->kategori) }}"
                                             data-filter=".{{ str_replace(' ', '', $k->kategori) }}">{{ $k->kategori }}</a>
                                     </li>
                                 @endforeach
                             </ul>
                         </div>
-                        <div class="row justtify-content-center container-grid projects-wrapper" id="demonames">
+                        <div class="row justtify-content-center container-grid" id="demonames">
                             @foreach ($produk as $d)
                                 <div
-                                    class="col-4 {{ str_replace(' ', '', $d->gender->nm_gender) }} {{ str_replace(' ', '', $d->kategori->kategori) }}">
+                                    class="col-4 box all {{ str_replace(' ', '', $d->gender->nm_gender) }} {{ str_replace(' ', '', $d->kategori->kategori) }}">
                                     <a href="#modal_detail{{ $d->id }}" data-bs-toggle="modal">
                                         <div class="card bg-primary">
                                             <img class="card-img-top img-fluid mt-2 lazy" loading="lazy"
                                                 src="{{ asset('img') }}/helwa.jpg" alt="Card image cap">
                                             <div class="card-body">
                                                 <h4 class="card-title font-size-16 mt-0 text-white demoname">
-                                                    {{ $d->nm_produk }}</h4>
+                                                    {{ $d->ganti_nama }}</h4>
                                                 {{-- <p class="card-text">Some quick example text to build on the card title and make
                                             up the bulk of the card's content.</p>
                                         <a href="#" class="btn btn-primary waves-effect waves-light">Button</a> --}}
@@ -124,7 +127,7 @@
                     <div class="modal-content">
                         <div class="modal-header bg-primary">
                             <h5 class="modal-title text-white mt-0" id="myModalLabeltambah">Detail Produk
-                                {{ $d->nm_produk }}
+                                {{ $d->ganti_nama }}
                             </h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                                 <span class="mdi mdi-close"></span>
@@ -132,7 +135,7 @@
                         </div>
                         <div class="modal-body">
                             <div class="row justify-content-center">
-                                <input type="hidden" name="nm_produk" value="{{ $d->nm_produk }}">
+                                <input type="hidden" name="nm_produk" value="{{ $d->ganti_nama }}">
                                 <input type="hidden" name="id_produk" value="{{ $d->id }}">
                                 @foreach ($resep as $r)
                                     <div class="col-3">
@@ -235,6 +238,13 @@
 
             $(function() {
                 $('.lazy').Lazy();
+            });
+
+            $('.boxselect').click(function() {
+                $this = $(this);
+                $('.box').hide();
+                $('.' + $this.attr('kategori_id')).show();
+                console.log("showing " + $this.attr('kategori_id') + " boxes");
             });
 
             var btsearch = {
