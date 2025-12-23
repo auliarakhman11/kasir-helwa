@@ -12,6 +12,7 @@ use App\Models\PenjualanKasir;
 use App\Models\Produk;
 use App\Models\Resep;
 use App\Models\Stok;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
@@ -240,11 +241,17 @@ class KasirController extends Controller
             ]);
 
         // Cek jika request berhasil
+        // if ($response->successful()) {
+        //     return response()->json(['message' => 'Message sent successfully', 'data' => $response->json()]);
+        // } else {
+        //     return response()->json(['error' => 'Failed to send message', 'data' => $response->json()], $response->status());
+        // }
         if ($response->successful()) {
-            return response()->json(['message' => 'Message sent successfully', 'data' => $response->json()]);
+            return true;
         } else {
-            return response()->json(['error' => 'Failed to send message', 'data' => $response->json()], $response->status());
+            return false;
         }
+        
     }
 
     public function sendMessage2()
@@ -270,4 +277,52 @@ class KasirController extends Controller
             return response()->json(['error' => 'Failed to send message', 'data' => $response->json()], $response->status());
         }
     }
+
+    public function sendWa(Request $request)
+    {
+
+        
+
+        $inv = $request->no_invoice;
+        $invoice = InvoiceKasir::where('invoice_kasir.no_invoice', $inv)->with(['penjualan', 'penjualan.getMenu', 'penjualan.cluster', 'cabang', 'penjualanKaryawan', 'penjualanKaryawan.karyawan', 'pembayaran'])->first();
+        $nm_customer = $invoice->nm_customer;
+        $no_tlp = $invoice->no_tlp;
+        $no_wa = substr($no_tlp, 1);
+
+
+        $data = [
+            'dt_invoice' => $invoice
+        ];
+
+        $directory = '/home/u1644550/public_html/kasir.helwaperfume.id/pdf_nota/' . $inv . '.pdf';
+        Pdf::loadView('kasir.sendWa', $data)->save($directory);
+
+        $response = Http::withHeaders([
+            'Authorization' => 'Bearer poozSo0VnQobTGiYOhaAHjaeaF0kJs0zixyKFosFdoMTjstAxJ',
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+        ])
+            ->post('https://api.whatspie.com/messages', [
+                'device' => '62895704893952',
+                'receiver' => '62'.$no_wa,
+                'type' => 'file',
+                'file_url' => 'https://kasir.helwaperfume.id/pdf_nota/'. $inv . '.pdf',
+                'message' => 'Terimakasih sudah membeli produk Helwa Perfume🥳 Berikut kami lampirkan nota pembelian anda.',
+                'simulate_typing' => 1
+            ]);
+
+        // Cek jika request berhasil
+        // if ($response->successful()) {
+        //     return response()->json(['message' => 'Message sent successfully', 'data' => $response->json()]);
+        // } else {
+        //     return response()->json(['error' => 'Failed to send message', 'data' => $response->json()], $response->status());
+        // }
+        if ($response->successful()) {
+            return true;
+        } else {
+            return false;
+        }
+        
+    }
+
 }

@@ -95,8 +95,8 @@
                                             <img class="card-img-top img-fluid mt-2 lazy" loading="lazy"
                                                 src="{{ asset('img') }}/helwa.jpg" alt="Card image cap">
                                             <div class="card-body">
-                                                <h4 class="card-title font-size-16 mt-0 text-white demoname">
-                                                    {{ $d->ganti_nama }}</h4>
+                                                <h3 class="card-title font-size-20 mt-0 text-white demoname">
+                                                    {{ $d->ganti_nama }}</h3>
                                                 {{-- <p class="card-text">Some quick example text to build on the card title and make
                                             up the bulk of the card's content.</p>
                                         <a href="#" class="btn btn-primary waves-effect waves-light">Button</a> --}}
@@ -192,6 +192,27 @@
         </div>
     </form>
 
+    <div id="modal_print" data-bs-backdrop="static" data-bs-keyboard="false" class="modal fade modal-cart" tabindex="-1" role="dialog" aria-labelledby="myModalLabelcart"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header bg-primary">
+                        <h5 class="modal-title text-white mt-0" id="myModalLabelcart">Print</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                            <span class="mdi mdi-close"></span>
+                        </button>
+                    </div>
+                    <div class="modal-body" id="table_print">
+                        
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary waves-effect" data-bs-dismiss="modal">Close</button>
+                        
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div>
+
 
 @section('script')
     <script type="text/javascript" src="{{ asset('cart') }}/jquery.lazy.min.js"></script>
@@ -231,6 +252,8 @@
                 timer: 1500
             });
             <?php endif; ?>
+
+            
 
             function numberWithCommas(x) {
                 return x.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
@@ -517,7 +540,20 @@
                             });
 
                             $('#modal_cart').modal('hide');
-                            window.location.href = "{{ route('printNota') }}?inv=" + data;
+
+                            let html_print = '';
+
+                            let no_invoice = data;
+
+                            let url_print = "{{ route('printNota') }}?inv=" + data;
+
+                            html_print += '<div class="row justify-content-center"><div class="col-6 text-center"><button type="button" no_invoice="'+no_invoice+'" id="btn_kirim_wa" class="btn btn-primary">Kirim WA <i class="mdi mdi-whatsapp"></i></button></div><div class="col-6 text-center"><a href="'+url_print+'" id="btn_print_nota" class="btn btn-primary">Print <i class="mdi mdi-printer-check"></i></a></div></div>';
+
+                            $('#table_print').html(html_print);
+
+                            $('#modal_print').modal('show');
+
+                            // window.location.href = "{{ route('printNota') }}?inv=" + data;
 
                         }
                     },
@@ -535,6 +571,66 @@
 
                     }
                 });
+
+
+            });
+
+            $(document).on('click', '#btn_kirim_wa', function() {
+                const no_invoice = $(this).attr("no_invoice");
+                
+                $(this).html(
+                    '<div class="spinner-border text-light" role="status"><span class="visually-hidden">Loading...</span></div>'
+                );
+                $(this).attr("disabled", true);
+
+                $.ajax({
+                    url: "{{ route('sendWa') }}",
+                    method: 'GET',
+                    dataType: "json",
+                    data: {
+                        no_invoice: no_invoice
+                    },
+                    success: function(data) {
+
+                        if (data) {
+                            Swal.fire({
+                                position: "top-end",
+                                icon: "success",
+                                title: "Struk pembelian berhasil dikirim",
+                                showConfirmButton: !1,
+                                timer: 1500
+                            });
+
+                            $('#btn_kirim_wa').html('Kirim WA <i class="mdi mdi-whatsapp"></i>');
+                            $('#btn_kirim_wa').removeAttr("disabled");
+                        } else {
+                            $('#btn_kirim_wa').html('Kirim WA <i class="mdi mdi-whatsapp"></i>');
+                            $('#btn_kirim_wa').removeAttr("disabled");
+                            Swal.fire({
+                                position: "top-end",
+                                icon: "error",
+                                title: "Error! ada masalah! Cek Nomor Wa!",
+                                showConfirmButton: !1,
+                                timer: 1500
+                            });
+                        }
+                        
+                    },
+                    error: function(err) { //jika error tampilkan error pada console
+                        $('#btn_kirim_wa').html('Kirim WA <i class="mdi mdi-whatsapp"></i>');
+                        $('#btn_kirim_wa').removeAttr("disabled");
+                        Swal.fire({
+                            position: "top-end",
+                            icon: "error",
+                            title: "Error! ada masalah!",
+                            showConfirmButton: !1,
+                            timer: 1500
+                        });
+                        console.log(err);
+
+                    }
+                });
+
 
 
             });
