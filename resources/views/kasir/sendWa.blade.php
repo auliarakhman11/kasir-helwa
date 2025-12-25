@@ -25,11 +25,12 @@
 
 <div class="invoice">
     <br>
-    <!--<center>-->
-    <!--    <img width="150" src="{{ asset('img') }}/helwa.png" alt="">-->
+    <center>
+        <img width="150" src="{{ asset('img') }}/helwa.png" alt="">
 
-    <!--</center>-->
-    <p align="center" class="huruf"><b><u>Helwa Perfume {{ $dt_invoice->cabang->nama }}</u></b></p>
+    </center>
+    <!--<p align="center" class="huruf"><b><u>Helwa Perfume {{ $dt_invoice->cabang->nama }}</u></b></p>-->
+    <p align="center" class="huruf">{{ $dt_invoice->cabang->nama }}</p>
 
     <table width="100%">
         {{-- <tr>

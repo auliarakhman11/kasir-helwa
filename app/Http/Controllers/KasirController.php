@@ -219,7 +219,7 @@ class KasirController extends Controller
     {
         $data = [
             'title' => 'List Invoice',
-            'invoice' => InvoiceKasir::where('invoice_kasir.tgl', date('Y-m-d'))->where('invoice_kasir.void', 0)->with(['penjualan', 'penjualan.getMenu', 'penjualanKaryawan.karyawan', 'pembayaran'])->orderBy('invoice_kasir.pembayaran_id', 'ASC')->orderBy('invoice_kasir.id', 'DESC')->get(),
+            'invoice' => InvoiceKasir::where('invoice_kasir.tgl', date('Y-m-d'))->where('invoice_kasir.void', 0)->with(['penjualan', 'penjualan.getMenu', 'penjualan.cluster', 'penjualanKaryawan.karyawan', 'pembayaran'])->orderBy('invoice_kasir.pembayaran_id', 'ASC')->orderBy('invoice_kasir.id', 'DESC')->get(),
         ];
         return view('kasir.list_invoice', $data);
     }
@@ -236,7 +236,7 @@ class KasirController extends Controller
                 'receiver' => '6281346350676',
                 'type' => 'file',
                 'file_url' => 'https://kasir.kebabyasmin.id/pdf/INV260425I130B.pdf',
-                'message' => '📚 API Documentation v2.1\n\nLatest version with new endpoints and examples.',
+                'message' => 'ðŸ“š API Documentation v2.1\n\nLatest version with new endpoints and examples.',
                 'simulate_typing' => 1
             ]);
 
@@ -251,7 +251,6 @@ class KasirController extends Controller
         } else {
             return false;
         }
-        
     }
 
     public function sendMessage2()
@@ -266,7 +265,7 @@ class KasirController extends Controller
                 'receiver' => '62895704893952',
                 'type' => 'file',
                 'file_url' => 'https://kasir.kebabyasmin.id/pdf/INV260425I130B.pdf',
-                'message' => '📚 API Documentation v2.1\n\nLatest version with new endpoints and examples.',
+                'message' => 'ðŸ“š API Documentation v2.1\n\nLatest version with new endpoints and examples.',
                 'simulate_typing' => 1
             ]);
 
@@ -281,7 +280,7 @@ class KasirController extends Controller
     public function sendWa(Request $request)
     {
 
-        
+
 
         $inv = $request->no_invoice;
         $invoice = InvoiceKasir::where('invoice_kasir.no_invoice', $inv)->with(['penjualan', 'penjualan.getMenu', 'penjualan.cluster', 'cabang', 'penjualanKaryawan', 'penjualanKaryawan.karyawan', 'pembayaran'])->first();
@@ -303,11 +302,11 @@ class KasirController extends Controller
             'Accept' => 'application/json',
         ])
             ->post('https://api.whatspie.com/messages', [
-                'device' => '62895704893952',
-                'receiver' => '62'.$no_wa,
+                'device' => '628138053500',
+                'receiver' => '62' . $no_wa,
                 'type' => 'file',
-                'file_url' => 'https://kasir.helwaperfume.id/pdf_nota/'. $inv . '.pdf',
-                'message' => 'Terimakasih sudah membeli produk Helwa Perfume🥳 Berikut kami lampirkan nota pembelian anda.',
+                'file_url' => 'https://kasir.helwaperfume.id/pdf_nota/' . $inv . '.pdf',
+                'message' => 'Terimakasih sudah membeli produk Helwa PerfumeðŸ¥³ Berikut kami lampirkan nota pembelian anda.',
                 'simulate_typing' => 1
             ]);
 
@@ -322,7 +321,5 @@ class KasirController extends Controller
         } else {
             return false;
         }
-        
     }
-
 }

@@ -39,7 +39,7 @@ Route::middleware('auth')->group(function () {
     Route::get('listInvoice', [KasirController::class, 'listInvoice'])->name('listInvoice');
     Route::get('sendMessage', [KasirController::class, 'sendMessage'])->name('sendMessage');
     Route::get('sendMessage2', [KasirController::class, 'sendMessage2'])->name('sendMessage2');
-    Route::get('sendWa', [KasirController::class,'sendWa'])->name('sendWa');
+    Route::get('sendWa', [KasirController::class, 'sendWa'])->name('sendWa');
     //end home
 
     //block
