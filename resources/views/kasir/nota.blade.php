@@ -95,9 +95,7 @@
                     {{ $d->catatan }}
                 </td>
 
-                <td width="20%" style="text-align: right;">
-                    <strong>{{ number_format($d->harga * $d->qty, 0) }}</strong>
-                </td>
+                <td width="20%" style="text-align: right;">{{ number_format($d->harga * $d->qty, 0) }}</td>
             </tr>
             @php
                 $total_produk += $d->harga * $d->qty;
@@ -121,21 +119,28 @@
                 <td style="text-align: right;"><strong>{{ number_format($dt_invoice->diskon, 0) }}</strong></td>
             </tr>
             <tr class="huruf">
+                <td><strong>Pembulatan</strong></td>
+                <td style="text-align: right;">
+                    <strong>{{ number_format($dt_invoice->pembulatan, 0) }}</strong>
+                </td>
+            </tr>
+            <tr class="huruf">
                 <td><strong>Grand Total</strong></td>
                 <td style="text-align: right;">
-                    <strong>{{ number_format($total_produk - $dt_invoice->diskon, 0) }}</strong>
+                    <strong>{{ number_format($total_produk - $dt_invoice->diskon + $dt_invoice->pembulatan, 0) }}</strong>
                 </td>
             </tr>
         @endif
 
         <tr class="huruf">
-            <td>Total Pembayaran</td>
-            <td style="text-align: right;">{{ number_format($dt_invoice->dibayar, 0) }}</td>
+            <td><strong>Total Pembayaran</strong></td>
+            <td style="text-align: right;"><strong>{{ number_format($dt_invoice->dibayar, 0) }}</strong></td>
         </tr>
         <tr class="huruf">
-            <td>Kembalian</td>
+            <td><strong>Kembalian</strong></td>
             <td style="text-align: right;">
-                {{ number_format($dt_invoice->dibayar - ($total_produk - $dt_invoice->diskon), 0) }}</td>
+                <strong>{{ number_format($dt_invoice->dibayar - ($total_produk - $dt_invoice->diskon + +$dt_invoice->pembulatan), 0) }}</strong>
+            </td>
         </tr>
     </table>
     <hr>

@@ -6,6 +6,7 @@ use App\Models\Gender;
 use App\Models\InvoiceKasir;
 use App\Models\Karyawan;
 use App\Models\Kategori;
+use App\Models\Member;
 use App\Models\Pembayaran;
 use App\Models\PenjualanKarywan;
 use App\Models\PenjualanKasir;
@@ -37,8 +38,9 @@ class KasirController extends Controller
     public function checkout(Request $request)
     {
         $no_invoice = 'INV' . date('dmy') . strtoupper(Str::random(5));
-        $total_invoice = 0;
-        $tot_diskon = 0;
+        $total_invoice = $request->total_cart;
+        $tot_diskon = $request->diskon;
+        $pembulatan = $request->pembulatan;
         $tgl = date('Y-m-d');
         $admin = Auth::user()->id;
         // $dt_user = User::where('id', $admin)->with(['cabang'])->first();
@@ -60,9 +62,9 @@ class KasirController extends Controller
                 $dt_invoice = InvoiceKasir::create([
                     'no_invoice' => $no_invoice,
                     'nm_customer' => $nm_customer,
-                    'total' => 0,
-                    'pembulatan' => 0,
-                    'dibayar' => 0,
+                    'total' => $total_invoice,
+                    'pembulatan' => $pembulatan,
+                    'dibayar' => $total_invoice + $pembulatan - $tot_diskon,
                     'diskon' => $tot_diskon,
                     'no_tlp' => $no_tlp,
                     'void' => 0,
@@ -169,7 +171,7 @@ class KasirController extends Controller
                         ]);
                     }
 
-                    $total_invoice += $c['quantity'] * $c['price'];
+                    // $total_invoice += $c['quantity'] * $c['price'];
 
                     // $total_pendapatan += ($c['quantity'] * $c->options->harga_normal)+$total_varian;
 
@@ -185,10 +187,10 @@ class KasirController extends Controller
                     'online' => $online,
                 ]);
 
-                InvoiceKasir::where('id', $dt_invoice->id)->update([
-                    'total' => $total_invoice,
-                    'dibayar' => $total_invoice,
-                ]);
+                // InvoiceKasir::where('id', $dt_invoice->id)->update([
+                //     'total' => $total_invoice,
+                //     'dibayar' => $total_invoice,
+                // ]);
 
                 return $no_invoice;
             } else {
@@ -279,9 +281,6 @@ class KasirController extends Controller
 
     public function sendWa(Request $request)
     {
-
-
-
         $inv = $request->no_invoice;
         $invoice = InvoiceKasir::where('invoice_kasir.no_invoice', $inv)->with(['penjualan', 'penjualan.getMenu', 'penjualan.cluster', 'cabang', 'penjualanKaryawan', 'penjualanKaryawan.karyawan', 'pembayaran'])->first();
         $nm_customer = $invoice->nm_customer;
@@ -320,6 +319,29 @@ class KasirController extends Controller
             return true;
         } else {
             return false;
+        }
+    }
+
+    public function cekMember(Request $request)
+    {
+        $cek = Member::where('no_tlp', $request->no_tlp)->where('void', 0)->orderBy('id', 'DESC')->first();
+        if ($cek) {
+            return response()->json(['nm_member' => $cek->nm_member, 'diskon' => $cek->diskon, 'status' => 'berhasil', 'dtMember' => 'ada']);
+        } else {
+
+            if ($request->total_cart > 100000) {
+                $diskon = 10;
+                Member::create([
+                    'no_tlp' => $request->no_tlp,
+                    'nm_member' => $request->nm_member,
+                    'diskon' => $diskon,
+                    'void' => 0
+                ]);
+
+                return response()->json(['nm_member' => $request->nm_member, 'diskon' => $diskon, 'status' => 'berhasil', 'dtMember' => 'tidak']);
+            } else {
+                return response()->json(['status' => 'gagal']);
+            }
         }
     }
 }

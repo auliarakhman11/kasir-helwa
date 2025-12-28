@@ -73,6 +73,7 @@
                                         <tr>
                                             <th>#</th>
                                             <th>Waktu</th>
+                                            <th>Customer</th>
                                             <th>Jenis Pembayaran</th>
                                             <th>Total<br>Produk</th>
                                             <th>Total<br>Tagihan</th>
@@ -89,6 +90,7 @@
                                             <tr>
                                                 <td>{{ $i++ }}</td>
                                                 <td>{{ date('d M Y H:i', strtotime($inv->created_at)) }}</td>
+                                                <td>{{ $inv->nm_customer }}</td>
                                                 <td>{{ $inv->pembayaran->pembayaran }}</td>
                                                 <td>
                                                     @php

@@ -42,6 +42,10 @@ Route::middleware('auth')->group(function () {
     Route::get('sendWa', [KasirController::class, 'sendWa'])->name('sendWa');
     //end home
 
+    //member
+    Route::get('cekMember', [KasirController::class, 'cekMember'])->name('cekMember');
+    //end member
+
     //block
     Route::get('forbidden-access', [AuthController::class, 'block'])->name('block');
     //endblock
