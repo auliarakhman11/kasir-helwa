@@ -189,7 +189,7 @@
                         </button>
                     </div>
                     <div class="modal-body" id="cart">
-                        
+
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary waves-effect"
@@ -223,32 +223,29 @@
         </div><!-- /.modal-dialog -->
     </div>
 
-    <form class="input_cart_mix">
-        <div id="modal_mix" class="modal fade modal-cart-mix" tabindex="-1" role="dialog"
-            aria-labelledby="myModalLabelmix" aria-hidden="true">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header bg-primary">
-                        <h5 class="modal-title text-white mt-0" id="myModalLabelmix">Mix Produk</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                            <span class="mdi mdi-close"></span>
-                        </button>
-                    </div>
-                    <div class="modal-body" id="table_mix">
 
+    <div id="modal_mix" class="modal fade modal-cart-mix" tabindex="-1" role="dialog"
+        aria-labelledby="myModalLabelmix" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-primary">
+                    <h5 class="modal-title text-white mt-0" id="myModalLabelmix">Mix Produk</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        <span class="mdi mdi-close"></span>
+                    </button>
+                </div>
+                <div class="modal-body" id="table_mix">
 
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary waves-effect" data-bs-dismiss="modal">Close</button>
+                    <button type="button" id="btn_submit_mix"
+                        class="btn btn-primary waves-effect waves-light">Save</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div>
 
-
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary waves-effect"
-                            data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary waves-effect waves-light">Save</button>
-                    </div>
-                </div><!-- /.modal-content -->
-            </div><!-- /.modal-dialog -->
-        </div>
-    </form>
 
 
 @section('script')
@@ -261,13 +258,13 @@
 
     <script>
         function table_mix() {
-            console.log('ya');
 
             let table_mix = '';
             table_mix +=
-                '<div class="row justify-content-center"><div class="col-12"><h4>Varian</h4></div>@foreach ($resep as $r)<div class="col-3"><label><input type="radio" name="resep_id" value="{{ $r->id }}|{{ $r->cluster->nm_cluster }}|{{ $r->ukuran }}|{{ $r->harga ? $r->harga : 0 }}}|{{ $r->cluster_id }}" class="card-input-element" required /><div class="card card-default card-input"><div class="card-header">{{ $r->cluster->nm_cluster }} {{ $r->ukuran }} ml<br>Rp.{{ number_format($r->harga, 0) }}</div></div></label></div>@endforeach</div>';
+                '<div class="row justify-content-center"><div class="col-12"><h4>Varian</h4></div>@foreach ($resep as $r)<div class="col-3"><label><input type="radio" name="resep_id_mix" value="{{ $r->id }}|{{ $r->cluster->nm_cluster }}|{{ $r->ukuran }}|{{ $r->harga ? $r->harga : 0 }}}|{{ $r->cluster_id }}" class="card-input-element" required /><div class="card card-default card-input"><div class="card-header">{{ $r->cluster->nm_cluster }} {{ $r->ukuran }} ml<br>Rp.{{ number_format($r->harga, 0) }}</div></div></label></div>@endforeach</div>';
+
             table_mix +=
-                '<div class="row justify-content-center"><div class="col-12"><hr class="bg-primary"></div><div class="col-12"><div class="card"><div class="card-header"><h4>Produk</h4><input type="text" class="form-control" placeholder="Cari produk.." id="search_field2"></div><div class="card-body row scroll" id="demonames2">@foreach ($produk as $p)<div class="col-3"><label><input type="checkbox" name="produk_id[]" value="{{ $p->id }}|{{ $p->ganti_nama }}" class="card-input-element" required /><div class="card card-default card-input border border-secondary"><div class="card-header "><span class="demoname2">{{ $p->ganti_nama }}</span></div></div></label></div>@endforeach</div></div></div></div>';
+                '<div class="row justify-content-center"><div class="col-12"><hr class="bg-primary"></div><div class="col-12"><div class="card"><div class="card-header"><h4>Produk</h4><input type="text" class="form-control" placeholder="Cari produk.." id="search_field2"></div><div class="card-body row scroll" id="demonames2">@foreach ($produk as $p)<div class="col-3"><label><input type="checkbox" name="produk_id[]" value="{{ $p->id }}|{{ $p->ganti_nama }}" class="card-input-element" required /><div class="card card-default card-input border border-secondary"><div class="card-header"><p class="demoname2">{{ $p->ganti_nama }}</p></div></div></label></div>@endforeach</div></div></div></div>';
 
             $('#table_mix').html(table_mix);
         }
@@ -323,6 +320,7 @@
                     $(search_field).keyup(function(e) {
                         e.preventDefault();
                         var query = $(this).val().toLowerCase();
+
                         if (query) {
                             // loop through all elements to find match
                             $.each($(searchable_elements), function() {
@@ -346,6 +344,60 @@
             $(function() {
 
                 btsearch.init('#search_field', '#demonames div', '.demoname');
+            });
+            //end search
+
+            var btsearch2 = {
+                init: function(search_field, searchable_elements, searchable_text_class) {
+                    $(document).on('keyup', search_field, function(e) {
+                        e.preventDefault();
+                        var query = $(this).val().toLowerCase();
+
+                        if (query) {
+                            // loop through all elements to find match
+                            $.each($(searchable_elements), function() {
+                                var title = $(this).find(searchable_text_class).text()
+                                    .toLowerCase();
+                                if (title.indexOf(query) == -1) {
+                                    $(this).hide();
+                                } else {
+                                    $(this).show();
+                                }
+                            });
+                        } else {
+                            // empty query so show everything
+                            $(searchable_elements).show();
+                        }
+                    });
+                }
+            }
+
+            // $(document).on('keyup', '#search_field2', function(e) {
+            //     e.preventDefault();
+            //     var query = $(this).val().toLowerCase();
+            //     console.log(query);
+
+            //     if (query) {
+            //         // loop through all elements to find match
+            //         $.each($('#demonames2 div'), function() {
+            //             var title = $(this).find('.demoname2').text()
+            //                 .toLowerCase();
+            //             if (title.indexOf(query) == -1) {
+            //                 $(this).hide();
+            //             } else {
+            //                 $(this).show();
+            //             }
+            //         });
+            //     } else {
+            //         // empty query so show everything
+            //         $('#demonames2 div').show();
+            //     }
+            // });
+
+            // INIT
+            $(function() {
+
+                btsearch2.init('#search_field2', '#demonames2 div', '.demoname2');
             });
             //end search
 
@@ -408,7 +460,8 @@
                     cart +=
                         '<div class="container mb-2"><strong>Diskon</strong> <strong style="float: right;">Rp. ' +
                         numberWithCommas(diskon) +
-                        '</strong></div><input id="diskon" name="diskon" type="hidden" value="' + diskon + '"><input id="member_id" name="member_id" type="hidden" value="NULL"><input id="diskon_id" name="diskon_id" type="hidden" value="NULL">';
+                        '</strong></div><input id="diskon" name="diskon" type="hidden" value="' + diskon +
+                        '"><input id="member_id" name="member_id" type="hidden" value="NULL"><input id="diskon_id" name="diskon_id" type="hidden" value="NULL">';
 
                     const grandTotal = totl - diskon;
 
@@ -738,36 +791,7 @@
             });
 
 
-            var btsearch2 = {
-                init: function(search_field, searchable_elements, searchable_text_class) {
-                    $(search_field).keyup(function(e) {
-                        e.preventDefault();
-                        var query = $(this).val().toLowerCase();
-                        if (query) {
-                            // loop through all elements to find match
-                            $.each($(searchable_elements), function() {
-                                var title = $(this).find(searchable_text_class).text()
-                                    .toLowerCase();
-                                if (title.indexOf(query) == -1) {
-                                    $(this).hide();
-                                } else {
-                                    $(this).show();
-                                }
-                            });
-                        } else {
-                            // empty query so show everything
-                            $(searchable_elements).show();
-                        }
-                    });
-                }
-            }
 
-            // INIT
-            $(function() {
-
-                btsearch2.init('#search_field2', '#demonames2 div', '.demoname2');
-            });
-            //end search
 
             // $(document).on('click', '#btn_mix', function(event) {
 
@@ -775,17 +799,17 @@
             // });
 
 
-            $(document).on('submit', '.input_cart_mix', async function(event) {
-                event.preventDefault();
+            $(document).on('click', '#btn_submit_mix', async function(event) {
+                // event.preventDefault();
 
-                const dataD2 = $(this).serializeArray();
+                // const dataD2 = $(this).serializeArray();
 
                 //  console.log(dataD2);
 
 
                 let id_produk = '';
                 let harga = '';
-                let nm_produk = '';
+                let nm_produk = 'MIX ';
                 let qty = 1;
 
                 let cluster_id = '';
@@ -797,36 +821,64 @@
 
                 let produk = '';
 
-                $.each(dataD2, function(index, d) {
+                // $.each(dataD2, function(index, d) {
 
-                    if (d.name == 'resep_id') {
-                        const dat = d.value.split('|');
-                        harga = dat[3];
-                        cluster_id = dat[4];
-                        cluster = dat[1];
-                        ukuran = dat[2];
-                        resep_id = dat[0]
+                //     if (d.name == 'resep_id') {
+                //         const dat = d.value.split('|');
+                //         harga = dat[3];
+                //         cluster_id = dat[4];
+                //         cluster = dat[1];
+                //         ukuran = dat[2];
+                //         resep_id = dat[0]
+                //     }
+
+                //     if (d.name == 'id_produk') {
+                //         id_produk = d.value;
+                //     }
+
+                //     if (d.name == 'nm_produk') {
+                //         nm_produk = d.value;
+                //     }
+
+                //     if (d.name == 'produk_id[]') {
+                //         const dat = d.value.split('|')
+                //         dat_produk.push({
+                //             id_produk: dat[0],
+                //             nm_produk: dat[1],
+                //         });
+                //         id_produk += dat[0];
+                //         nm_produk += "MIX " + dat[1] + '+';
+
+                //     }
+
+
+                // });
+
+                const dat_resep_id = $('input[name="resep_id_mix"]:checked').val();
+
+                const dat = dat_resep_id.split('|');
+                harga = dat[3];
+                cluster_id = dat[4];
+                cluster = dat[1];
+                ukuran = dat[2];
+                resep_id = dat[0];
+
+                let dtPrd = $('input[name="produk_id[]"]:checked');
+
+
+
+                $('input[name="produk_id[]"]:checked').each(function(i) {
+                    const dat = this.value.split('|')
+                    dat_produk.push({
+                        id_produk: dat[0],
+                        nm_produk: dat[1],
+                    });
+                    id_produk += dat[0];
+                    if (dtPrd.length == (i + 1)) {
+                        nm_produk += dat[1];
+                    } else {
+                        nm_produk += dat[1] + ' + ';
                     }
-
-                    // if (d.name == 'id_produk') {
-                    //     id_produk = d.value;
-                    // }
-
-                    // if (d.name == 'nm_produk') {
-                    //     nm_produk = d.value;
-                    // }
-
-                    if (d.name == 'produk_id[]') {
-                        const dat = d.value.split('|')
-                        dat_produk.push({
-                            id_produk: dat[0],
-                            nm_produk: dat[1],
-                        });
-                        id_produk += dat[0];
-                        nm_produk += "MIX " + dat[1] + '+';
-
-                    }
-
 
                 });
 
@@ -853,14 +905,14 @@
                     harga_normal: parseInt(harga),
                     dp: 0,
                     mix: 1,
-                    produk_mix: []
+                    produk_mix: dat_produk
                 });
 
                 console.log(ecomCart.data.items);
 
                 loadCart();
 
-                $('.modal-cart').modal('hide');
+                $('#modal_mix').modal('hide');
 
 
 
@@ -980,7 +1032,7 @@
                                         });
                                     }
 
-                                    
+
 
 
                                     await gantiDiskon(data.diskon)

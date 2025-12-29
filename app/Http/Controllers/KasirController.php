@@ -32,7 +32,7 @@ class KasirController extends Controller
             'resep' => Resep::where('void', 0)->with('cluster')->get(),
             'pembayaran' => Pembayaran::where('aktif', 1)->get(),
             'karyawan' => Karyawan::where('aktif', 1)->get(),
-            'diskon' => Diskon::where('void',0)->where('exp_date','>=',date('Y-m-d'))->get(),
+            'diskon' => Diskon::where('void', 0)->where('exp_date', '>=', date('Y-m-d'))->get(),
         ];
         return view('kasir.index', $data);
     }
@@ -115,27 +115,52 @@ class KasirController extends Controller
                     //     $dp = $c['dp'];
                     // }
 
+                    if ($c['mix'] == 1) {
+                        $dt_penjualan = [
+                            'invoice_id' => $dt_invoice->id,
+                            'produk_id' => 0,
+                            'resep_id' => $c['resep_id'],
+                            'cluster_id' => $c['cluster_id'],
+                            'ukuran' => $c['ukuran'],
+                            'qty' => $c['quantity'],
+                            'harga' => $c['price'],
+                            'harga_normal' => $c['harga_normal'],
+                            'catatan' => NULL,
+                            'ket_mix' => $c['name'],
+                            'mix' => 1,
+                            'pembayaran_id' => $pembayaran_id,
+                            'diskon' => $diskon,
+                            'total' => $c['quantity'] * $c['price'],
+                            'void' => 0,
+                            'admin' => $admin,
+                            'cabang_id' => 1,
+                            'tgl' => $tgl,
+                            'online' => $online,
+                        ];
+                    } else {
+                        $dt_penjualan = [
+                            'invoice_id' => $dt_invoice->id,
+                            'produk_id' => $c['id_bujur'],
+                            'resep_id' => $c['resep_id'],
+                            'cluster_id' => $c['cluster_id'],
+                            'ukuran' => $c['ukuran'],
+                            'qty' => $c['quantity'],
+                            'harga' => $c['price'],
+                            'harga_normal' => $c['harga_normal'],
+                            'catatan' => NULL,
+                            'pembayaran_id' => $pembayaran_id,
+                            'diskon' => $diskon,
+                            'total' => $c['quantity'] * $c['price'],
+                            'void' => 0,
+                            'admin' => $admin,
+                            'cabang_id' => 1,
+                            'tgl' => $tgl,
+                            'online' => $online,
+                        ];
+                    }
 
-                    $dt_penjualan = [
 
-                        'invoice_id' => $dt_invoice->id,
-                        'produk_id' => $c['id_bujur'],
-                        'resep_id' => $c['resep_id'],
-                        'cluster_id' => $c['cluster_id'],
-                        'ukuran' => $c['ukuran'],
-                        'qty' => $c['quantity'],
-                        'harga' => $c['price'],
-                        'harga_normal' => $c['harga_normal'],
-                        'catatan' => NULL,
-                        'pembayaran_id' => $pembayaran_id,
-                        'diskon' => $diskon,
-                        'total' => $c['quantity'] * $c['price'],
-                        'void' => 0,
-                        'admin' => $admin,
-                        'cabang_id' => 1,
-                        'tgl' => $tgl,
-                        'online' => $online,
-                    ];
+
                     $penjualan_id = PenjualanKasir::create($dt_penjualan);
 
                     $dt_resep = Resep::where('id', $c['resep_id'])->first();
@@ -163,18 +188,40 @@ class KasirController extends Controller
                             'void' => 0
                         ]);
 
-                        Stok::create([
-                            'invoice_id' => $dt_invoice->id,
-                            'penjualan_id' => $penjualan_id->id,
-                            'produk_id' => $c['id_bujur'],
-                            'cabang_id' => 1,
-                            'qty' => $qty_produk,
-                            'harga' => 0,
-                            'tgl' => $tgl,
-                            'admin' => $admin,
-                            'jenis' => 2,
-                            'void' => 0
-                        ]);
+                        if ($c['mix'] == 0) {
+                            Stok::create([
+                                'invoice_id' => $dt_invoice->id,
+                                'penjualan_id' => $penjualan_id->id,
+                                'produk_id' => $c['id_bujur'],
+                                'cabang_id' => 1,
+                                'qty' => $qty_produk,
+                                'harga' => 0,
+                                'tgl' => $tgl,
+                                'admin' => $admin,
+                                'jenis' => 2,
+                                'void' => 0
+                            ]);
+                        } else {
+                            $panjang_mix = count($c['produk_mix']);
+                            if ($qty_produk > 0 && $panjang_mix > 0) {
+                                $qty_mix = $qty_produk / $panjang_mix;
+
+                                foreach ($c['produk_mix'] as $pmix) {
+                                    Stok::create([
+                                        'invoice_id' => $dt_invoice->id,
+                                        'penjualan_id' => $penjualan_id->id,
+                                        'produk_id' => $pmix['id_produk'],
+                                        'cabang_id' => 1,
+                                        'qty' => $qty_mix,
+                                        'harga' => 0,
+                                        'tgl' => $tgl,
+                                        'admin' => $admin,
+                                        'jenis' => 2,
+                                        'void' => 0
+                                    ]);
+                                }
+                            }
+                        }
                     }
 
                     // $total_invoice += $c['quantity'] * $c['price'];
@@ -332,7 +379,7 @@ class KasirController extends Controller
     {
         $cek = Member::where('no_tlp', $request->no_tlp)->where('void', 0)->orderBy('id', 'DESC')->first();
         if ($cek) {
-            return response()->json(['member_id'=>$cek->id, 'nm_member' => $cek->nm_member, 'diskon' => $cek->diskon, 'status' => 'berhasil', 'dtMember' => 'ada']);
+            return response()->json(['member_id' => $cek->id, 'nm_member' => $cek->nm_member, 'diskon' => $cek->diskon, 'status' => 'berhasil', 'dtMember' => 'ada']);
         } else {
 
             if ($request->total_cart > 100000) {
@@ -344,11 +391,10 @@ class KasirController extends Controller
                     'void' => 0
                 ]);
 
-                return response()->json(['member_id'=>$member->id, 'nm_member' => $request->nm_member, 'diskon' => $diskon, 'status' => 'berhasil', 'dtMember' => 'tidak']);
+                return response()->json(['member_id' => $member->id, 'nm_member' => $request->nm_member, 'diskon' => $diskon, 'status' => 'berhasil', 'dtMember' => 'tidak']);
             } else {
                 return response()->json(['status' => 'gagal']);
             }
         }
     }
-
 }
