@@ -189,7 +189,7 @@
                         </button>
                     </div>
                     <div class="modal-body" id="cart">
-
+                        
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary waves-effect"
@@ -408,7 +408,7 @@
                     cart +=
                         '<div class="container mb-2"><strong>Diskon</strong> <strong style="float: right;">Rp. ' +
                         numberWithCommas(diskon) +
-                        '</strong></div><input id="diskon" name="diskon" type="hidden" value="' + diskon + '">';
+                        '</strong></div><input id="diskon" name="diskon" type="hidden" value="' + diskon + '"><input id="member_id" name="member_id" type="hidden" value="NULL"><input id="diskon_id" name="diskon_id" type="hidden" value="NULL">';
 
                     const grandTotal = totl - diskon;
 
@@ -432,7 +432,7 @@
                         '</strong></div>';
 
                     cart +=
-                        '<hr class="bg-primary"><div class="row"><div class="col-5 mt-2"><label for="">Customer</label><input type="text" class="form-control" name="nm_customer" id="nm_customer" required></div><div class="col-5 mt-2"><label for="">Nomor WA</label><input type="text" class="form-control" name="no_tlp" id="no_tlp" required></div><div class="col-2 mt-2"><button type="button" id="btn_member" class="btn btn-primary mt-3"><i class="fas fa-search"></i></button></div><div class="col-6 mt-2"><label for="">Jenis Pembayaran</label><select name="pembayaran_id" id="pembayaran_id" class="form-control">@foreach ($pembayaran as $pm)<option value="{{ $pm->id }}">{{ $pm->pembayaran }}</option>@endforeach</select></div><div class="col-12"><hr class="bg-primary"></div></div><center>Dilayani Oleh</center><div class="row justify-content-center"> @foreach ($karyawan as $k)<div class="col-4"><label><input type="radio" name="karyawan_id" value="{{ $k->id }}" class="card-input-element"/><div class="card card-default card-input"><div class="card-header">{{ $k->nama }}</div></div></label></div>@endforeach</div>';
+                        '<hr class="bg-primary"><div class="row"><div class="col-5 mt-2"><label for="">Customer</label><input type="text" class="form-control" name="nm_customer" id="nm_customer" required></div><div class="col-5 mt-2"><label for="">Nomor WA</label><input type="text" class="form-control" name="no_tlp" id="no_tlp" required></div><div class="col-2 mt-2"><button type="button" id="btn_member" class="btn btn-primary mt-3"><i class="fas fa-search"></i></button></div><div class="col-6 mt-2"><label for="">Jenis Pembayaran</label><select name="pembayaran_id" id="pembayaran_id" class="form-control">@foreach ($pembayaran as $pm)<option value="{{ $pm->id }}">{{ $pm->pembayaran }}</option>@endforeach</select></div><div class="col-6 mt-2"><label for="">Diskon</label><select name="diskon_id" id="select_diskon" class="form-control"><option value="">Pilih Diskon</option>@foreach ($diskon as $ds)<option value="{{ $ds->id }}|{{ $ds->jml_diskon }}|{{ $ds->maksimal }}">{{ $ds->nm_diskon }} @if ($ds->jml_diskon > 100) Rp. {{ $ds->jml_diskon }} @else {{ $ds->jml_diskon }}% @endif </option>@endforeach</select></div><div class="col-12"><hr class="bg-primary"></div></div><center>Dilayani Oleh</center><div class="row justify-content-center"> @foreach ($karyawan as $k)<div class="col-4"><label><input type="radio" name="karyawan_id" value="{{ $k->id }}" class="card-input-element"/><div class="card card-default card-input"><div class="card-header">{{ $k->nama }}</div></div></label></div>@endforeach</div>';
 
 
                 }
@@ -522,7 +522,7 @@
                     harga_normal: parseInt(harga),
                     dp: 0,
                     mix: 0,
-                    produk_mix: []
+                    produk_mix: [],
                 });
 
                 console.log(ecomCart.data.items);
@@ -575,6 +575,8 @@
                 const pembayaran_id = $('#pembayaran_id').val();
                 const karyawan_id = $('input[name="karyawan_id"]:checked').val();
                 const diskon = $('#diskon').val();
+                const diskon_id = $('#diskon_id').val();
+                const member_id = $('#member_id').val();
                 const pembulatan = $('#pembulatan').val();
                 const total_cart = $('#total_cart').val();
 
@@ -590,6 +592,8 @@
                         pembayaran_id: pembayaran_id,
                         karyawan_id: karyawan_id,
                         diskon: diskon,
+                        diskon_id: diskon_id,
+                        member_id: member_id,
                         pembulatan: pembulatan,
                         total_cart: total_cart,
                         cart: cart
@@ -976,11 +980,14 @@
                                         });
                                     }
 
+                                    
+
 
                                     await gantiDiskon(data.diskon)
-                                    loadCart();
+                                    await loadCart();
                                     $('#no_tlp').val(no_tlp);
                                     $('#nm_customer').val(nm_member);
+                                    $('#member_id').val(data.member_id);
 
                                 } else {
 
@@ -1031,6 +1038,56 @@
 
 
                 }
+
+            });
+
+
+            $(document).on('change', '#select_diskon', async function(event) {
+
+                const total_cart = $('#total_cart').val();
+                const no_tlp = $('#no_tlp').val();
+                const nm_member = $('#nm_customer').val();
+                const dat_diskon = $(this).val();
+                let fix_diskon = 0;
+                let diskon_id = '';
+
+                if (dat_diskon.trim() !== '') {
+
+                    const diskon = dat_diskon.split('|');
+                    diskon_id = diskon[0];
+                    const jml_diskon = parseInt(diskon[1]);
+                    const maksimal = parseInt(diskon[2]);
+
+                    if (jml_diskon > 100) {
+                        fix_diskon = jml_diskon;
+                    } else {
+                        if (parseInt(total_cart) > 0 && jml_diskon > 0) {
+                            const _diskon = parseInt(total_cart) * jml_diskon / 100;
+                            if (_diskon <= maksimal) {
+                                fix_diskon = _diskon;
+                            } else {
+                                fix_diskon = maksimal;
+                            }
+                        } else {
+                            fix_diskon = 0;
+                        }
+                    }
+
+
+                } else {
+
+                    fix_diskon = 0;
+                    diskon_id = '';
+
+                }
+
+                await gantiDiskon(fix_diskon)
+                await loadCart();
+
+                $('#diskon_id').val(diskon_id);
+                $('#no_tlp').val(no_tlp);
+                $('#nm_customer').val(nm_member);
+                $('#select_diskon').val(dat_diskon);
 
             });
 

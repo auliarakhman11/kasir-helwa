@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Diskon;
 use App\Models\Gender;
 use App\Models\InvoiceKasir;
 use App\Models\Karyawan;
@@ -31,6 +32,7 @@ class KasirController extends Controller
             'resep' => Resep::where('void', 0)->with('cluster')->get(),
             'pembayaran' => Pembayaran::where('aktif', 1)->get(),
             'karyawan' => Karyawan::where('aktif', 1)->get(),
+            'diskon' => Diskon::where('void',0)->where('exp_date','>=',date('Y-m-d'))->get(),
         ];
         return view('kasir.index', $data);
     }
@@ -41,6 +43,8 @@ class KasirController extends Controller
         $total_invoice = $request->total_cart;
         $tot_diskon = $request->diskon;
         $pembulatan = $request->pembulatan;
+        $diskon_id = $request->diskon_id;
+        $member_id = $request->member_id;
         $tgl = date('Y-m-d');
         $admin = Auth::user()->id;
         // $dt_user = User::where('id', $admin)->with(['cabang'])->first();
@@ -66,6 +70,8 @@ class KasirController extends Controller
                     'pembulatan' => $pembulatan,
                     'dibayar' => $total_invoice + $pembulatan - $tot_diskon,
                     'diskon' => $tot_diskon,
+                    'diskon_id' => $diskon_id,
+                    'member_id' => $member_id,
                     'no_tlp' => $no_tlp,
                     'void' => 0,
                     'admin' => $admin,
@@ -326,22 +332,23 @@ class KasirController extends Controller
     {
         $cek = Member::where('no_tlp', $request->no_tlp)->where('void', 0)->orderBy('id', 'DESC')->first();
         if ($cek) {
-            return response()->json(['nm_member' => $cek->nm_member, 'diskon' => $cek->diskon, 'status' => 'berhasil', 'dtMember' => 'ada']);
+            return response()->json(['member_id'=>$cek->id, 'nm_member' => $cek->nm_member, 'diskon' => $cek->diskon, 'status' => 'berhasil', 'dtMember' => 'ada']);
         } else {
 
             if ($request->total_cart > 100000) {
                 $diskon = 10;
-                Member::create([
+                $member = Member::create([
                     'no_tlp' => $request->no_tlp,
                     'nm_member' => $request->nm_member,
                     'diskon' => $diskon,
                     'void' => 0
                 ]);
 
-                return response()->json(['nm_member' => $request->nm_member, 'diskon' => $diskon, 'status' => 'berhasil', 'dtMember' => 'tidak']);
+                return response()->json(['member_id'=>$member->id, 'nm_member' => $request->nm_member, 'diskon' => $diskon, 'status' => 'berhasil', 'dtMember' => 'tidak']);
             } else {
                 return response()->json(['status' => 'gagal']);
             }
         }
     }
+
 }
