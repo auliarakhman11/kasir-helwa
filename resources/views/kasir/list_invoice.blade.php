@@ -95,7 +95,7 @@
                                                 <td>
                                                     @php
                                                         $ttl_produk = 0;
-                                                        $total += $inv->total;
+                                                        $total += $inv->total + $inv->pembulatan - $inv->diskon;
                                                     @endphp
                                                     @foreach ($inv->penjualan as $p)
                                                         @php
@@ -104,7 +104,8 @@
                                                     @endforeach
                                                     {{ number_format($ttl_produk, 0) }}
                                                 </td>
-                                                <td>{{ number_format($inv->total, 0) }}</td>
+                                                <td>{{ number_format($inv->total + $inv->pembulatan - $inv->diskon, 0) }}
+                                                </td>
                                                 <td>
 
                                                     @foreach ($inv->penjualanKaryawan as $k)
@@ -135,6 +136,14 @@
                                         @endforeach
 
                                     </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td colspan="5"><strong>Total</strong></td>
+                                            <td><strong>{{ number_format($total, 0) }}</strong></td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                    </tfoot>
                                 </table>
                             </div>
                         </div>
@@ -185,7 +194,9 @@
                                     @endphp
                                     <tr>
                                         <td>{{ $i++ }}</td>
-                                        <td>{{ $p->getMenu->ganti_nama }} ({{ $p->cluster->nm_cluster }})</td>
+                                        <td>{{ $p->mix == 1 ? $p->ket_mix : $p->getMenu->ganti_nama }}
+                                            ({{ $p->cluster->nm_cluster }})
+                                        </td>
                                         <td>{{ $p->ukuran }} ml</td>
                                         <td>{{ $p->qty }} x {{ number_format($p->harga, 0) }}</td>
                                         <td>{{ number_format($p->total, 0) }}</td>
@@ -194,8 +205,25 @@
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <td colspan="4"><strong>Total</strong></td>
+                                    <td colspan="4"><strong>Subtotal</strong></td>
                                     <td><strong>{{ number_format($total, 0) }}</strong></td>
+                                </tr>
+                                @if ($d->diskon > 0)
+                                    <tr>
+                                        <td colspan="4"><strong>Diskon</strong></td>
+                                        <td><strong>{{ number_format($d->diskon, 0) }}</strong></td>
+                                    </tr>
+                                @endif
+                                @if ($d->pembulatan > 0)
+                                    <tr>
+                                        <td colspan="4"><strong>Pembulatan</strong></td>
+                                        <td><strong>{{ number_format($d->pembulatan, 0) }}</strong></td>
+                                    </tr>
+                                @endif
+
+                                <tr>
+                                    <td colspan="4"><strong>Grand Total</strong></td>
+                                    <td><strong>{{ number_format($total + $d->pembulatan - $d->diskon, 0) }}</strong></td>
                                 </tr>
                             </tfoot>
                         </table>
