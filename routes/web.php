@@ -3,6 +3,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\KasirController;
+use App\Http\Controllers\PengeluaranController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -40,7 +41,16 @@ Route::middleware('auth')->group(function () {
     Route::get('sendMessage', [KasirController::class, 'sendMessage'])->name('sendMessage');
     Route::get('sendMessage2', [KasirController::class, 'sendMessage2'])->name('sendMessage2');
     Route::get('sendWa', [KasirController::class, 'sendWa'])->name('sendWa');
+
+    Route::get('laporan', [KasirController::class, 'laporan'])->name('laporan');
     //end home
+
+    //pengeluaran
+    Route::get('pengeluaran', [PengeluaranController::class, 'pengeluaran'])->name('pengeluaran');
+    Route::post('addPengeluaran', [PengeluaranController::class, 'addPengeluaran'])->name('addPengeluaran');
+    Route::patch('editPengeluaran', [PengeluaranController::class, 'editPengeluaran'])->name('editPengeluaran');
+    Route::post('dropPengeluaran', [PengeluaranController::class, 'dropPengeluaran'])->name('dropPengeluaran');
+    //end pengeluaran
 
     //member
     Route::get('cekMember', [KasirController::class, 'cekMember'])->name('cekMember');

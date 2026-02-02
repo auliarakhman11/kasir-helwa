@@ -9,6 +9,7 @@ use App\Models\Karyawan;
 use App\Models\Kategori;
 use App\Models\Member;
 use App\Models\Pembayaran;
+use App\Models\Pengeluaran;
 use App\Models\PenjualanKarywan;
 use App\Models\PenjualanKasir;
 use App\Models\Produk;
@@ -345,7 +346,7 @@ class KasirController extends Controller
             'dt_invoice' => $invoice
         ];
 
-        $directory = '/home/u1644550/public_html/kasir.helwaperfume.id/pdf_nota/' . $inv . '.pdf';
+        $directory = '/home/u716034504/domains/kasir.helwaperfume.id/public_html/pdf_nota/' . $inv . '.pdf';
         Pdf::loadView('kasir.sendWa', $data)->save($directory);
 
         $response = Http::withHeaders([
@@ -358,7 +359,7 @@ class KasirController extends Controller
                 'receiver' => '62' . $no_wa,
                 'type' => 'file',
                 'file_url' => 'https://kasir.helwaperfume.id/pdf_nota/' . $inv . '.pdf',
-                'message' => 'Terimakasih sudah membeli produk Helwa PerfumeðŸ¥³ Berikut kami lampirkan nota pembelian anda.',
+                'message' => 'Terimakasih sudah membeli produk Helwa Perfume 🥳 Berikut kami lampirkan nota pembelian anda.',
                 'simulate_typing' => 1
             ]);
 
@@ -396,5 +397,17 @@ class KasirController extends Controller
                 return response()->json(['status' => 'gagal']);
             }
         }
+    }
+
+    public function Laporan()
+    {
+        $tgl = date('Y-m-d');
+        $data = [
+            'title' => 'Laporan',
+            'penjualan' => PenjualanKarywan::select('karyawan.nama')->selectRaw('SUM(total) as ttl, SUM(pembulatan) as ttl_pembulatan, SUM(diskon) as ttl_diskon')->leftJoin('karyawan', 'penjualan_karyawan.karyawan_id', '=', 'karyawan.id')->leftJoin('invoice_kasir', 'penjualan_karyawan.invoice_id', '=', 'invoice_kasir.id')->where('invoice_kasir.void', 0)->where('invoice_kasir.tgl', $tgl)->groupBy('penjualan_karyawan.karyawan_id')->get(),
+            'pengeluaran' => Pengeluaran::select('jenis')->selectRaw('SUM(jumlah) as jml')->where('tgl', $tgl)->where('void', 0)->groupBy('jenis')->get(),
+            'produk' => PenjualanKasir::select('produk.nm_produk', 'produk.ganti_nama')->selectRaw('SUM(harga_normal) as ttl_harga, SUM(qty) as ttl_qty')->leftJoin('produk', 'penjualan_kasir.produk_id', '=', 'produk.id')->where('void', 0)->where('tgl', $tgl)->groupBy('produk_id')->get(),
+        ];
+        return view('kasir.laporan', $data);
     }
 }

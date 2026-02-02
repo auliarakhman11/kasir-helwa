@@ -60,6 +60,7 @@
                         <div class="dropdown-divider"></div> --}}
                         <a class="dropdown-item" href="{{ route('logout') }}"><i
                                 class="mdi mdi-logout font-size-16 align-middle mr-1"></i> Logout</a>
+
                     </div>
                 </div>
             </div>
@@ -101,7 +102,25 @@
                                 </a>
                             </li>
 
-                            <li class="nav-item dropdown">
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('listInvoice') }}">
+                                    Invoice
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('pengeluaran') }}">
+                                    Pengeluaran
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('laporan') }}">
+                                    Laporan
+                                </a>
+                            </li>
+
+                            {{-- <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle arrow-none" href="javascript:void(0)"
                                     id="topnav-uielement" role="button" data-toggle="dropdown" aria-haspopup="true"
                                     aria-expanded="false">
@@ -127,7 +146,35 @@
                                     </div>
 
                                 </div>
-                            </li>
+                            </li> --}}
+
+                            {{-- <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle arrow-none" href="javascript:void(0)"
+                                    id="topnav-uielement" role="button" data-toggle="dropdown" aria-haspopup="true"
+                                    aria-expanded="false">
+                                    Pengeluaran <div class="arrow-down"></div>
+                                </a>
+                                <div class="dropdown-menu dropdown-mega-menu-md px-2"
+                                    aria-labelledby="topnav-uielement">
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <div class="dropdown-item-text font-weight-semibold font-size-16">
+                                                <div class="d-inline-block icons-sm me-1"><i class="uim uim-box"></i>
+                                                </div> Pengeluaran
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <a href="{{ route('pengeluaran') }}" class="dropdown-item">List
+                                                        Pengeluaran</a>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </li> --}}
 
                             {{-- <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle arrow-none" href="#" id="topnav-components"
