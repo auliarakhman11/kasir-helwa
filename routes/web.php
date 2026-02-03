@@ -1,6 +1,6 @@
 <?php
 
-
+use App\Http\Controllers\AbsenController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\KasirController;
 use App\Http\Controllers\PengeluaranController;
@@ -55,6 +55,11 @@ Route::middleware('auth')->group(function () {
     //member
     Route::get('cekMember', [KasirController::class, 'cekMember'])->name('cekMember');
     //end member
+
+    //absen
+    Route::get('absen', [AbsenController::class, 'index'])->name('absen');
+    Route::post('addAbsen', [AbsenController::class, 'addAbsen'])->name('addAbsen');
+    //endabsen
 
     //block
     Route::get('forbidden-access', [AuthController::class, 'block'])->name('block');
