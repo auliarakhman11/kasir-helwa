@@ -73,7 +73,7 @@
                     </div>
 
                     <div class="card-body">
-                        @if (date('H:i') <= '15:00')
+                        @if (date('H:i') <= '14:00')
                             <form action="{{ route('addAbsen') }}" method="post">
                                 @csrf
                                 <div class="row justify-content-center">
