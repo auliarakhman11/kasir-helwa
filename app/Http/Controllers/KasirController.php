@@ -404,6 +404,7 @@ class KasirController extends Controller
         $tgl = date('Y-m-d');
         $data = [
             'title' => 'Laporan',
+            'perbayar' => InvoiceKasir::select('invoice_kasir.*')->selectRaw('SUM(total) as ttl, SUM(pembulatan) as ttl_pembulatan, SUM(diskon) as ttl_diskon')->where('invoice_kasir.void', 0)->where('invoice_kasir.tgl', $tgl)->groupBy('pembayaran_id')->with('pembayaran')->get(),
             'penjualan' => PenjualanKarywan::select('karyawan.nama')->selectRaw('SUM(total) as ttl, SUM(pembulatan) as ttl_pembulatan, SUM(diskon) as ttl_diskon')->leftJoin('karyawan', 'penjualan_karyawan.karyawan_id', '=', 'karyawan.id')->leftJoin('invoice_kasir', 'penjualan_karyawan.invoice_id', '=', 'invoice_kasir.id')->where('invoice_kasir.void', 0)->where('invoice_kasir.tgl', $tgl)->groupBy('penjualan_karyawan.karyawan_id')->get(),
             'pengeluaran' => Pengeluaran::select('jenis')->selectRaw('SUM(jumlah) as jml')->where('tgl', $tgl)->where('void', 0)->groupBy('jenis')->get(),
             'produk' => PenjualanKasir::select('produk.nm_produk', 'produk.ganti_nama')->selectRaw('SUM(harga_normal) as ttl_harga, SUM(qty) as ttl_qty')->leftJoin('produk', 'penjualan_kasir.produk_id', '=', 'produk.id')->where('void', 0)->where('tgl', $tgl)->groupBy('produk_id')->get(),

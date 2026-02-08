@@ -53,7 +53,18 @@
                                                         {{ date('d/m/Y') }}</u></strong></td>
                                         </tr>
                                         <tr>
-                                            <td colspan="2" class="text-center"><strong>Penjualan</strong></td>
+                                            <td colspan="2" class="text-center"><strong>Penjualan Pertransaksi</strong>
+                                            </td>
+                                        </tr>
+                                        @foreach ($perbayar as $d)
+                                            <tr>
+                                                <td><strong>{{ $d->pembayaran->pembayaran }}</strong></td>
+                                                <td><strong>{{ number_format($d->ttl + $d->ttl_pembulatan - $d->ttl_diskon, 0) }}</strong>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                        <tr>
+                                            <td colspan="2" class="text-center"><strong>Penjualan Karyawan</strong></td>
                                         </tr>
                                         @php
                                             $tot_invoive = 0;
@@ -92,6 +103,14 @@
                                                 </td>
                                             </tr>
                                         @endforeach
+                                        @if ($tot_pengeluaran_kas == 0)
+                                            <tr>
+                                                <td><strong>Pengeluaran</strong>
+                                                </td>
+                                                <td><strong>0</strong>
+                                                </td>
+                                            </tr>
+                                        @endif
                                         <tr>
                                             <td><strong>Sisa Kas</strong></td>
                                             <td><strong>{{ number_format($tot_invoive - $tot_pengeluaran_kas, 0) }}</strong>
