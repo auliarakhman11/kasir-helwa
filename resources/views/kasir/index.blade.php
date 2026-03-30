@@ -980,9 +980,7 @@
                 const total_cart = $('#total_cart').val();
                 const nm_member = $('#nm_customer').val();
 
-                if (total_cart.trim() == '' || total_cart.trim() == 0 || no_tlp.trim() == '' ||
-                    nm_member
-                    .trim() == '') {
+                if (total_cart.trim() == '' || total_cart.trim() == 0 || no_tlp.trim() == '') {
 
                     $('#btn_member').html(
                         '<i class="fas fa-search"></i>');
@@ -1011,29 +1009,33 @@
 
                             if (data) {
 
-                                if (data.status == 'berhasil') {
-                                    if (data.dtMember == 'ada') {
+                                if (data.status == 'ditemukan') {
 
-                                        Swal.fire({
-                                            position: "top-end",
-                                            icon: "success",
-                                            title: "Member ditemukan",
-                                            showConfirmButton: !1,
-                                            timer: 1500
-                                        });
-                                    } else {
 
-                                        Swal.fire({
-                                            position: "top-end",
-                                            icon: "success",
-                                            title: "Member berhasil didaftarkan",
-                                            showConfirmButton: !1,
-                                            timer: 1500
-                                        });
-                                    }
+                                    Swal.fire({
+                                        position: "top-end",
+                                        icon: "success",
+                                        title: "Member ditemukan",
+                                        showConfirmButton: !1,
+                                        timer: 3000
+                                    });
 
 
 
+                                    await gantiDiskon(data.diskon)
+                                    await loadCart();
+                                    $('#no_tlp').val(no_tlp);
+                                    $('#nm_customer').val(data.nm_member);
+                                    $('#member_id').val(data.member_id);
+
+                                } else if (data.status == 'didaftarkan') {
+                                    Swal.fire({
+                                        position: "top-end",
+                                        icon: "success",
+                                        title: "Member berhasil didaftarkan",
+                                        showConfirmButton: !1,
+                                        timer: 3000
+                                    });
 
                                     await gantiDiskon(data.diskon)
                                     await loadCart();
@@ -1041,14 +1043,22 @@
                                     $('#nm_customer').val(nm_member);
                                     $('#member_id').val(data.member_id);
 
+                                } else if (data.status == 'nama kosong') {
+                                    Swal.fire({
+                                        position: "top-end",
+                                        icon: "error",
+                                        title: "Nama Customer harus diisi!",
+                                        showConfirmButton: !1,
+                                        timer: 3000
+                                    });
                                 } else {
 
                                     Swal.fire({
                                         position: "top-end",
                                         icon: "error",
-                                        title: "Jumlah pembelian kurang dari Rp. 100,000!",
+                                        title: "Member tidak ditemukan. Jumlah pembelian kurang dari Rp. 100,000!",
                                         showConfirmButton: !1,
-                                        timer: 1500
+                                        timer: 3000
                                     });
 
                                 }
@@ -1065,9 +1075,9 @@
                                 Swal.fire({
                                     position: "top-end",
                                     icon: "error",
-                                    title: "Error! ada masalah! Cek Nomor Wa!",
+                                    title: "Error! ada masalah!",
                                     showConfirmButton: !1,
-                                    timer: 1500
+                                    timer: 3000
                                 });
                             }
 

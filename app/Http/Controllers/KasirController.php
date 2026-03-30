@@ -380,21 +380,26 @@ class KasirController extends Controller
     {
         $cek = Member::where('no_tlp', $request->no_tlp)->where('void', 0)->orderBy('id', 'DESC')->first();
         if ($cek) {
-            return response()->json(['member_id' => $cek->id, 'nm_member' => $cek->nm_member, 'diskon' => $cek->diskon, 'status' => 'berhasil', 'dtMember' => 'ada']);
+            return response()->json(['member_id' => $cek->id, 'nm_member' => $cek->nm_member, 'diskon' => $cek->diskon, 'status' => 'ditemukan', 'dtMember' => 'ada']);
         } else {
 
             if ($request->total_cart > 100000) {
-                $diskon = 10;
-                $member = Member::create([
-                    'no_tlp' => $request->no_tlp,
-                    'nm_member' => $request->nm_member,
-                    'diskon' => $diskon,
-                    'void' => 0
-                ]);
 
-                return response()->json(['member_id' => $member->id, 'nm_member' => $request->nm_member, 'diskon' => $diskon, 'status' => 'berhasil', 'dtMember' => 'tidak']);
+                if ($request->nm_member) {
+                    $diskon = 10;
+                    $member = Member::create([
+                        'no_tlp' => $request->no_tlp,
+                        'nm_member' => $request->nm_member,
+                        'diskon' => $diskon,
+                        'void' => 0
+                    ]);
+
+                    return response()->json(['member_id' => $member->id, 'nm_member' => $request->nm_member, 'diskon' => $diskon, 'status' => 'didaftarkan', 'dtMember' => 'tidak']);
+                } else {
+                    return response()->json(['status' => 'nama kosong']);
+                }
             } else {
-                return response()->json(['status' => 'gagal']);
+                return response()->json(['status' => 'kurang']);
             }
         }
     }
