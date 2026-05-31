@@ -338,42 +338,83 @@ class KasirController extends Controller
         $inv = $request->no_invoice;
         $invoice = InvoiceKasir::where('invoice_kasir.no_invoice', $inv)->with(['penjualan', 'penjualan.getMenu', 'penjualan.cluster', 'cabang', 'penjualanKaryawan', 'penjualanKaryawan.karyawan', 'pembayaran'])->first();
         $nm_customer = $invoice->nm_customer;
+        $total_bayar = number_format($invoice->total - $invoice->diskon, 0);
+        $tanggal = date('d/m/Y', strtotime($invoice->tgl));
         $no_tlp = $invoice->no_tlp;
-        $no_wa = substr($no_tlp, 1);
+        $nm_cabang = $invoice->cabang ? $invoice->cabang->nama : '';
+        // $no_wa = substr($no_tlp, 1);
 
 
-        $data = [
-            'dt_invoice' => $invoice
-        ];
+        // $data = [
+        //     'dt_invoice' => $invoice
+        // ];
 
-        $directory = '/home/u716034504/domains/kasir.helwaperfume.id/public_html/pdf_nota/' . $inv . '.pdf';
-        Pdf::loadView('kasir.sendWa', $data)->save($directory);
+        // $directory = '/home/u716034504/domains/kasir.helwaperfume.id/public_html/pdf_nota/' . $inv . '.pdf';
+        // Pdf::loadView('kasir.sendWa', $data)->save($directory);
 
-        $response = Http::withHeaders([
-            'Authorization' => 'Bearer poozSo0VnQobTGiYOhaAHjaeaF0kJs0zixyKFosFdoMTjstAxJ',
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-        ])
-            ->post('https://api.whatspie.com/messages', [
-                'device' => '628138053500',
-                'receiver' => '62' . $no_wa,
-                'type' => 'file',
-                'file_url' => 'https://kasir.helwaperfume.id/pdf_nota/' . $inv . '.pdf',
-                'message' => 'Terimakasih sudah membeli produk Helwa Perfume 🥳 Berikut kami lampirkan nota pembelian anda.',
-                'simulate_typing' => 1
-            ]);
+        // $response = Http::withHeaders([
+        //     'Authorization' => 'Bearer poozSo0VnQobTGiYOhaAHjaeaF0kJs0zixyKFosFdoMTjstAxJ',
+        //     'Content-Type' => 'application/json',
+        //     'Accept' => 'application/json',
+        // ])
+        //     ->post('https://api.whatspie.com/messages', [
+        //         'device' => '628138053500',
+        //         'receiver' => '62' . $no_wa,
+        //         'type' => 'file',
+        //         'file_url' => 'https://kasir.helwaperfume.id/pdf_nota/' . $inv . '.pdf',
+        //         'message' => 'Terimakasih sudah membeli produk Helwa Perfume 🥳 Berikut kami lampirkan nota pembelian anda.',
+        //         'simulate_typing' => 1
+        //     ]);
 
-        // Cek jika request berhasil
+
         // if ($response->successful()) {
-        //     return response()->json(['message' => 'Message sent successfully', 'data' => $response->json()]);
+        //     return true;
         // } else {
-        //     return response()->json(['error' => 'Failed to send message', 'data' => $response->json()], $response->status());
+        //     return false;
         // }
-        if ($response->successful()) {
-            return true;
-        } else {
+
+        $message = '';
+        // $message .= "Kepada yang terhormat Bapak/Ibu $nm_customer, Terimakasih sudah membeli produk Helwa Perfume 🥳 Berikut kami lampirkan nota pembelian anda:\n\n";
+        $link = "https://kasir.helwaperfume.id/printNota?inv=" . $inv;
+        $message .= $pesan = "Halo, kak *$nm_customer*! 👋\n\nTerima kasih telah berbelanja di Helwa Perfume $nm_cabang.\nBerikut adalah ringkasan transaksi Anda:\n\n🧾 No. Invoice : $inv\n📅 Tanggal : $tanggal\n💰 Total Bayar : *Rp $total_bayar*\n\n🔗 *Lihat Nota Lengkap Anda:*\n$link\n\nSemoga harinya menyenangkan! ✨";
+
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => 'https://api.fonnte.com/send',
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'POST',
+            CURLOPT_POSTFIELDS => array(
+                'target' => $no_tlp,
+                'message' => $message,
+                'typing' => false,
+                'delay' => '2',
+                'countryCode' => '62',
+                'followup' => 0,
+                'inboxid' => 0,
+                'duration' => 1,
+            ),
+            CURLOPT_HTTPHEADER => array(
+                'Authorization: XqY6iq5AND6LzSTWQeub'
+            ),
+        ));
+
+        $response = curl_exec($curl);
+        if (curl_errno($curl)) {
+            $error_msg = curl_error($curl);
+        }
+        curl_close($curl);
+
+        if (isset($error_msg)) {
             return false;
         }
+
+        return true;
     }
 
     public function cekMember(Request $request)
