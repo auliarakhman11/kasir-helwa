@@ -338,7 +338,7 @@ class KasirController extends Controller
         $inv = $request->no_invoice;
         $invoice = InvoiceKasir::where('invoice_kasir.no_invoice', $inv)->with(['penjualan', 'penjualan.getMenu', 'penjualan.cluster', 'cabang', 'penjualanKaryawan', 'penjualanKaryawan.karyawan', 'pembayaran'])->first();
         $nm_customer = $invoice->nm_customer;
-        $total_bayar = number_format($invoice->total - $invoice->diskon, 0);
+        $total_bayar = number_format($invoice->total - $invoice->diskon + $invoice->pembulatan, 0);
         $tanggal = date('d/m/Y', strtotime($invoice->tgl));
         $no_tlp = $invoice->no_tlp;
         $nm_cabang = $invoice->cabang ? $invoice->cabang->nama : '';
