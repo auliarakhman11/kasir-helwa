@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Bahan;
 use App\Models\Diskon;
 use App\Models\Gender;
 use App\Models\InvoiceKasir;
@@ -168,35 +169,27 @@ class KasirController extends Controller
 
                     if ($dt_resep) {
 
-                        if ($dt_resep->takaran1 && $dt_resep->takaran2 && $dt_resep->ukuran) {
-                            $qty_alkohol = $dt_resep->takaran1 * $dt_resep->ukuran / 100;
-                            $qty_produk = $dt_resep->takaran2 * $dt_resep->ukuran / 100;
+                        if ($dt_resep->takaran1 && $dt_resep->takaran2 && $dt_resep->takaran3 && $dt_resep->takaran4 && $dt_resep->ukuran) {
+                            $qty_alkohol = $dt_resep->takaran2 * $dt_resep->ukuran / 100;
+                            $qty_produk = $dt_resep->takaran1 * $dt_resep->ukuran / 100;
+                            $qty_fixactiv = $dt_resep->takaran3 * $dt_resep->ukuran / 100;
+                            $qty_metanol = $dt_resep->takaran4 * $dt_resep->ukuran / 100;
                         } else {
                             $qty_alkohol = 0;
                             $qty_produk = 0;
+                            $qty_fixactiv = 0;
+                            $qty_metanol = 0;
                         }
-
-                        Stok::create([
-                            'invoice_id' => $dt_invoice->id,
-                            'penjualan_id' => $penjualan_id->id,
-                            'produk_id' => 0,
-                            'cabang_id' => 1,
-                            'qty' => $qty_alkohol,
-                            'harga' => 0,
-                            'tgl' => $tgl,
-                            'admin' => $admin,
-                            'jenis' => 2,
-                            'void' => 0
-                        ]);
 
                         if ($c['mix'] == 0) {
                             Stok::create([
                                 'invoice_id' => $dt_invoice->id,
                                 'penjualan_id' => $penjualan_id->id,
                                 'produk_id' => $c['id_bujur'],
+                                'jenis_bahan' => 1,
                                 'cabang_id' => 1,
                                 'qty' => $qty_produk,
-                                'harga' => 0,
+                                'harga' => 1500 * $qty_produk,
                                 'tgl' => $tgl,
                                 'admin' => $admin,
                                 'jenis' => 2,
@@ -212,9 +205,10 @@ class KasirController extends Controller
                                         'invoice_id' => $dt_invoice->id,
                                         'penjualan_id' => $penjualan_id->id,
                                         'produk_id' => $pmix['id_produk'],
+                                        'jenis_bahan' => 1,
                                         'cabang_id' => 1,
                                         'qty' => $qty_mix,
-                                        'harga' => 0,
+                                        'harga' => 1500 * $qty_mix,
                                         'tgl' => $tgl,
                                         'admin' => $admin,
                                         'jenis' => 2,
@@ -223,6 +217,81 @@ class KasirController extends Controller
                                 }
                             }
                         }
+
+                        //absolut
+                        Stok::create([
+                            'invoice_id' => $dt_invoice->id,
+                            'penjualan_id' => $penjualan_id->id,
+                            'produk_id' => 1,
+                            'jenis_bahan' => 2,
+                            'cabang_id' => 1,
+                            'qty' => $qty_alkohol,
+                            'harga' => 100 * $qty_alkohol,
+                            'tgl' => $tgl,
+                            'admin' => $admin,
+                            'jenis' => 2,
+                            'void' => 0
+                        ]);
+
+                        //Fixactiv
+                        Stok::create([
+                            'invoice_id' => $dt_invoice->id,
+                            'penjualan_id' => $penjualan_id->id,
+                            'produk_id' => 2,
+                            'jenis_bahan' => 2,
+                            'cabang_id' => 1,
+                            'qty' => $qty_fixactiv,
+                            'harga' => 100 * $qty_fixactiv,
+                            'tgl' => $tgl,
+                            'admin' => $admin,
+                            'jenis' => 2,
+                            'void' => 0
+                        ]);
+
+                        //metanol
+                        Stok::create([
+                            'invoice_id' => $dt_invoice->id,
+                            'penjualan_id' => $penjualan_id->id,
+                            'produk_id' => 3,
+                            'jenis_bahan' => 2,
+                            'cabang_id' => 1,
+                            'qty' => $qty_metanol,
+                            'harga' => 100 * $qty_metanol,
+                            'tgl' => $tgl,
+                            'admin' => $admin,
+                            'jenis' => 2,
+                            'void' => 0
+                        ]);
+
+                        //botol
+                        Stok::create([
+                            'invoice_id' => $dt_invoice->id,
+                            'penjualan_id' => $penjualan_id->id,
+                            'produk_id' => 4,
+                            'jenis_bahan' => 2,
+                            'cabang_id' => 1,
+                            'qty' => 1,
+                            'harga' => 5000,
+                            'tgl' => $tgl,
+                            'admin' => $admin,
+                            'jenis' => 2,
+                            'void' => 0
+                        ]);
+
+                        //Packaging
+                        Stok::create([
+                            'invoice_id' => $dt_invoice->id,
+                            'penjualan_id' => $penjualan_id->id,
+                            'produk_id' => 5,
+                            'jenis_bahan' => 2,
+                            'cabang_id' => 1,
+                            'qty' => 1,
+                            'harga' => 5000,
+                            'tgl' => $tgl,
+                            'admin' => $admin,
+                            'jenis' => 2,
+                            'void' => 0
+                        ]);
                     }
 
                     // $total_invoice += $c['quantity'] * $c['price'];

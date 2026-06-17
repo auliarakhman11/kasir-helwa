@@ -10,7 +10,7 @@ class Stok extends Model
     use HasFactory;
 
     protected $table = 'stok';
-    protected $fillable = ['invoice_id', 'penjualan_id', 'produk_id', 'cabang_id', 'qty', 'harga', 'tgl', 'admin', 'jenis', 'void'];
+    protected $fillable = ['invoice_id', 'penjualan_id', 'produk_id', 'cabang_id', 'qty', 'harga', 'tgl', 'admin', 'jenis', 'jenis_bahan', 'void'];
 
     public function produk()
     {
